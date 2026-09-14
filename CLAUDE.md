@@ -19,3 +19,16 @@ scenes/ scripts/ audio/ rendered/ data/ frontend/
 - scenes/<topic>.py  — Manim scene
 - scripts/<topic>.json — [{id, text, start, end, beat}]
 - rendered/<topic>.mp4
+
+## Caption rules
+- A beat's opening caption must match that segment's FIRST sentence,
+  not its conclusion. The payoff line goes at the payoff moment, not
+  at the start of the beat.
+  Example: segment 5's caption opens "one more comparison: nine
+  against seven", NOT "the largest has bubbled to the end" — the 9
+  hasn't moved yet. Re-show the payoff caption after the swap.
+- A caption must never assert something the animation hasn't shown yet.
+- Captions are written by self.beat(name, caption) in TimedScene, which
+  guarantees caption-first. Don't write captions any other way.
+- Run check_caption_sync() before rendering. It dry-runs the scene with
+  play/wait stubbed, so it costs no render time.
