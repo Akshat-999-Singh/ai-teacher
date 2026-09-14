@@ -1,0 +1,2 @@
+en-US-AriaNeural
+We will track a running sum as we scan left to right.

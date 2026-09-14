@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Checking every possible subarray instead would cost order n squared.

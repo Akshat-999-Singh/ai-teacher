@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Whenever that running sum turns negative, we reset it to zero.

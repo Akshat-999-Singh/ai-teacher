@@ -1,0 +1,191 @@
+[
+  {
+    "id": 1,
+    "text": "Here is an array of nine integers, some positive and some negative.",
+    "start": 0.0,
+    "end": 4.728,
+    "beat": "intro_array"
+  },
+  {
+    "id": 2,
+    "text": "We want the contiguous run of numbers with the largest sum.",
+    "start": 5.078,
+    "end": 9.206,
+    "beat": "intro_goal"
+  },
+  {
+    "id": 3,
+    "text": "We will track a running sum as we scan left to right.",
+    "start": 9.556,
+    "end": 13.276,
+    "beat": "intro_running"
+  },
+  {
+    "id": 4,
+    "text": "Whenever that running sum turns negative, we reset it to zero.",
+    "start": 13.626,
+    "end": 18.33,
+    "beat": "intro_reset"
+  },
+  {
+    "id": 5,
+    "text": "And we keep a best so far, the largest sum seen yet.",
+    "start": 18.68,
+    "end": 22.904,
+    "beat": "intro_best"
+  },
+  {
+    "id": 6,
+    "text": "Add negative two: the running sum becomes negative two.",
+    "start": 23.254,
+    "end": 27.622,
+    "beat": "p0_extend"
+  },
+  {
+    "id": 7,
+    "text": "That is negative, so we drop the running sum back to zero.",
+    "start": 27.972,
+    "end": 32.22,
+    "beat": "p0_reset"
+  },
+  {
+    "id": 8,
+    "text": "Add one: the running sum climbs to one.",
+    "start": 32.57,
+    "end": 35.906,
+    "beat": "p1_extend"
+  },
+  {
+    "id": 9,
+    "text": "One beats our old best of zero, so best so far moves up.",
+    "start": 36.256,
+    "end": 40.864,
+    "beat": "p1_record"
+  },
+  {
+    "id": 10,
+    "text": "Add negative three: the running sum drops to negative two.",
+    "start": 41.214,
+    "end": 45.654,
+    "beat": "p2_extend"
+  },
+  {
+    "id": 11,
+    "text": "Negative again, so the running sum resets to zero once more.",
+    "start": 46.004,
+    "end": 50.732,
+    "beat": "p2_reset"
+  },
+  {
+    "id": 12,
+    "text": "Add four: the running sum jumps up to four.",
+    "start": 51.082,
+    "end": 54.658,
+    "beat": "p3_extend"
+  },
+  {
+    "id": 13,
+    "text": "Four beats one, so best so far climbs to four.",
+    "start": 55.008,
+    "end": 58.992,
+    "beat": "p3_record"
+  },
+  {
+    "id": 14,
+    "text": "Add negative one: the running sum eases down to three.",
+    "start": 59.342,
+    "end": 63.494,
+    "beat": "p4_extend"
+  },
+  {
+    "id": 15,
+    "text": "Add two: the running sum rises again, up to five.",
+    "start": 63.844,
+    "end": 68.068,
+    "beat": "p5_extend"
+  },
+  {
+    "id": 16,
+    "text": "Five beats four, so best so far climbs once more.",
+    "start": 68.418,
+    "end": 72.714,
+    "beat": "p5_record"
+  },
+  {
+    "id": 17,
+    "text": "Add one more, and the running sum reaches six.",
+    "start": 73.064,
+    "end": 76.712,
+    "beat": "p6_extend"
+  },
+  {
+    "id": 18,
+    "text": "Six is our best yet, so the marker rises to match.",
+    "start": 77.062,
+    "end": 81.262,
+    "beat": "p6_record"
+  },
+  {
+    "id": 19,
+    "text": "Add negative five: the running sum falls all the way to one.",
+    "start": 81.612,
+    "end": 86.148,
+    "beat": "p7_extend"
+  },
+  {
+    "id": 20,
+    "text": "Add four: the running sum ends at five, just short of six.",
+    "start": 86.498,
+    "end": 91.154,
+    "beat": "p8_extend"
+  },
+  {
+    "id": 21,
+    "text": "We have scanned every number, and best so far stops at six.",
+    "start": 91.504,
+    "end": 95.992,
+    "beat": "an_final"
+  },
+  {
+    "id": 22,
+    "text": "That six came from four, negative one, two, and one.",
+    "start": 96.342,
+    "end": 101.118,
+    "beat": "an_bracket"
+  },
+  {
+    "id": 23,
+    "text": "Four minus one plus two plus one really does add to six.",
+    "start": 101.468,
+    "end": 105.908,
+    "beat": "an_sumcheck"
+  },
+  {
+    "id": 24,
+    "text": "Notice we only swept across the array one single time.",
+    "start": 106.258,
+    "end": 110.458,
+    "beat": "an_pass"
+  },
+  {
+    "id": 25,
+    "text": "One pass over n numbers means this algorithm runs in linear time.",
+    "start": 110.808,
+    "end": 115.728,
+    "beat": "an_linear"
+  },
+  {
+    "id": 26,
+    "text": "Checking every possible subarray instead would cost order n squared.",
+    "start": 116.078,
+    "end": 121.022,
+    "beat": "an_contrast"
+  },
+  {
+    "id": 27,
+    "text": "One running sum, one number that only climbs, and the answer appears.",
+    "start": 121.372,
+    "end": 126.412,
+    "beat": "end_line"
+  }
+]

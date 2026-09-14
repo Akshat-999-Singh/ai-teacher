@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Notice we only swept across the array one single time.
