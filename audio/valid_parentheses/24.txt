@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Compilers and editors use exactly this trick to check your syntax.

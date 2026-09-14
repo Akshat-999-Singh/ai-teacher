@@ -1,0 +1,184 @@
+[
+  {
+    "id": 1,
+    "text": "Here is a string of six bracket characters to check.",
+    "start": 0.0,
+    "end": 3.744,
+    "beat": "intro_string1"
+  },
+  {
+    "id": 2,
+    "text": "Beside it, an empty stack will grow upward as we scan.",
+    "start": 4.094,
+    "end": 8.318,
+    "beat": "intro_stack"
+  },
+  {
+    "id": 3,
+    "text": "Every opening bracket we see gets pushed onto that stack.",
+    "start": 8.668,
+    "end": 12.796,
+    "beat": "intro_push_rule"
+  },
+  {
+    "id": 4,
+    "text": "Every closing bracket must match whatever sits on top.",
+    "start": 13.146,
+    "end": 17.178,
+    "beat": "intro_pop_rule"
+  },
+  {
+    "id": 5,
+    "text": "A mismatch at any point means the string is invalid.",
+    "start": 17.528,
+    "end": 21.392,
+    "beat": "intro_fail_rule"
+  },
+  {
+    "id": 6,
+    "text": "The first character is an opening curly brace: push it.",
+    "start": 21.742,
+    "end": 25.942,
+    "beat": "c1_push0"
+  },
+  {
+    "id": 7,
+    "text": "Next is an opening square bracket, pushed right on top.",
+    "start": 26.292,
+    "end": 30.54,
+    "beat": "c1_push1"
+  },
+  {
+    "id": 8,
+    "text": "Then an opening round bracket, also pushed onto the stack.",
+    "start": 30.89,
+    "end": 35.162,
+    "beat": "c1_push2"
+  },
+  {
+    "id": 9,
+    "text": "A closing round bracket arrives and matches the top: pop.",
+    "start": 35.512,
+    "end": 39.952,
+    "beat": "c1_pop0"
+  },
+  {
+    "id": 10,
+    "text": "A closing square bracket comes next, matching the new top.",
+    "start": 40.302,
+    "end": 44.79,
+    "beat": "c1_pop1"
+  },
+  {
+    "id": 11,
+    "text": "Finally a closing curly brace matches the very last item.",
+    "start": 45.14,
+    "end": 49.58,
+    "beat": "c1_pop2"
+  },
+  {
+    "id": 12,
+    "text": "The stack is empty and every bracket found its match.",
+    "start": 49.93,
+    "end": 53.818,
+    "beat": "c1_verdict"
+  },
+  {
+    "id": 13,
+    "text": "A stack works because the most recent opener closes first.",
+    "start": 54.168,
+    "end": 58.464,
+    "beat": "why_lifo"
+  },
+  {
+    "id": 14,
+    "text": "Now try a trickier string with just four characters.",
+    "start": 58.814,
+    "end": 62.678,
+    "beat": "c2_intro"
+  },
+  {
+    "id": 15,
+    "text": "An opening round bracket arrives, so we push it.",
+    "start": 63.028,
+    "end": 66.868,
+    "beat": "c2_push0"
+  },
+  {
+    "id": 16,
+    "text": "An opening square bracket follows, pushed right on top.",
+    "start": 67.218,
+    "end": 71.466,
+    "beat": "c2_push1"
+  },
+  {
+    "id": 17,
+    "text": "A closing round bracket appears, but the top is square.",
+    "start": 71.816,
+    "end": 75.992,
+    "beat": "c2_mismatch"
+  },
+  {
+    "id": 18,
+    "text": "They do not match, so the string is invalid right here.",
+    "start": 76.342,
+    "end": 80.446,
+    "beat": "c2_fail"
+  },
+  {
+    "id": 19,
+    "text": "Unlike the first string, this one fails at the very first clash.",
+    "start": 80.796,
+    "end": 85.476,
+    "beat": "an_contrast"
+  },
+  {
+    "id": 20,
+    "text": "We have now seen both a clean match and a real mismatch.",
+    "start": 85.826,
+    "end": 89.714,
+    "beat": "an_seen_both"
+  },
+  {
+    "id": 21,
+    "text": "Both checks needed just one single pass through the string.",
+    "start": 90.064,
+    "end": 94.072,
+    "beat": "an_onepass"
+  },
+  {
+    "id": 22,
+    "text": "And the stack itself never needs more room than the nesting depth.",
+    "start": 94.422,
+    "end": 98.79,
+    "beat": "an_space"
+  },
+  {
+    "id": 23,
+    "text": "Checking every possible pair by hand would be far slower.",
+    "start": 99.14,
+    "end": 103.244,
+    "beat": "an_naive"
+  },
+  {
+    "id": 24,
+    "text": "Compilers and editors use exactly this trick to check your syntax.",
+    "start": 103.594,
+    "end": 108.442,
+    "beat": "an_realworld"
+  },
+  {
+    "id": 25,
+    "text": "One pass, one stack, and every bracket finds its partner.",
+    "start": 108.792,
+    "end": 113.424,
+    "beat": "an_summary"
+  },
+  {
+    "id": 26,
+    "text": "That is how a simple stack keeps every string honest.",
+    "start": 113.774,
+    "end": 117.662,
+    "beat": "end_line"
+  }
+]

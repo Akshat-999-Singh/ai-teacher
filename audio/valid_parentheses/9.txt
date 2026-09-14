@@ -1,0 +1,2 @@
+en-US-AriaNeural
+A closing round bracket arrives and matches the top: pop.

@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Both checks needed just one single pass through the string.

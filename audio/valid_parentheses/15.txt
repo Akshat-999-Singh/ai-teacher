@@ -1,0 +1,2 @@
+en-US-AriaNeural
+An opening round bracket arrives, so we push it.

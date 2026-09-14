@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Here is a string of six bracket characters to check.

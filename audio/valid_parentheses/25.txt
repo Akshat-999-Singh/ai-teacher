@@ -1,0 +1,2 @@
+en-US-AriaNeural
+One pass, one stack, and every bracket finds its partner.

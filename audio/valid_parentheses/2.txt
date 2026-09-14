@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Beside it, an empty stack will grow upward as we scan.

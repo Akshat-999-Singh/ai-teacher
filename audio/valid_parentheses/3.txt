@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Every opening bracket we see gets pushed onto that stack.

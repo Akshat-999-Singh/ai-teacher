@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Checking every possible pair by hand would be far slower.

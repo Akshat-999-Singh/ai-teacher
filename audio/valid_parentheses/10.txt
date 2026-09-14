@@ -1,0 +1,2 @@
+en-US-AriaNeural
+A closing square bracket comes next, matching the new top.

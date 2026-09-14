@@ -1,0 +1,2 @@
+en-US-AriaNeural
+And the stack itself never needs more room than the nesting depth.

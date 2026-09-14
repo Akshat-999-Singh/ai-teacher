@@ -1,0 +1,2 @@
+en-US-AriaNeural
+A closing round bracket appears, but the top is square.
