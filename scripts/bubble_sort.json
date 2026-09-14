@@ -1,79 +1,248 @@
 [
   {
     "id": 1,
-    "text": "Here is an array of five numbers: five, two, nine, one, and seven. They are in no particular order, and our goal is to rearrange them so they climb steadily from smallest to largest. There are many ways to do this. The one we are going to build today is arguably the simplest thing that could possibly work.",
+    "text": "Here is an array of five numbers, in no particular order.",
     "start": 0.0,
-    "end": 21.144,
-    "beat": "show_array"
+    "end": 4.344,
+    "beat": "intro_array",
+    "caption": "an array of five numbers: 5, 2, 9, 1, 7"
   },
   {
     "id": 2,
-    "text": "The entire algorithm rests on a single rule. Look at two neighboring numbers. If the left one is bigger than the right one, swap them. That is it. No global view of the array, no clever bookkeeping. Just one local comparison, repeated patiently.",
-    "start": 21.494,
-    "end": 40.742,
-    "beat": "explain_rule"
+    "text": "Our goal is to rearrange them from smallest to largest.",
+    "start": 4.694,
+    "end": 8.774,
+    "beat": "intro_goal"
   },
   {
     "id": 3,
-    "text": "So we start at the left edge, and compare five and two. Five is bigger than two, so by our rule these two are in the wrong order, and we swap them. Notice that the array is not sorted yet. But it is, in one small way, more sorted than it was a moment ago.",
-    "start": 41.092,
-    "end": 58.972,
-    "beat": "first_compare"
+    "text": "The whole algorithm rests on one very simple rule.",
+    "start": 9.124,
+    "end": 13.036,
+    "beat": "rule_state"
   },
   {
     "id": 4,
-    "text": "Now slide one step to the right and repeat. Five against nine: five is smaller, so this pair is already fine, and we leave it alone. Slide again. Nine against one, clearly out of order, so we swap. And watch what is happening to that nine. It keeps winning its comparisons, so it keeps moving to the right.",
-    "start": 59.322,
-    "end": 82.506,
-    "beat": "continue_pass"
+    "text": "Compare two neighbors, and swap them if the left one is bigger.",
+    "start": 13.386,
+    "end": 17.634,
+    "beat": "rule_local"
   },
   {
     "id": 5,
-    "text": "One more comparison: nine against seven. Nine wins again, and slides into the final position. This is the key insight of the pass. The largest number, wherever it happened to start, gets carried all the way to the end. It bubbles up. And that is where the name comes from.",
-    "start": 82.856,
-    "end": 103.088,
-    "beat": "bubble_to_end"
+    "text": "Start at the left edge, and compare five against two.",
+    "start": 17.984,
+    "end": 22.088,
+    "beat": "p1_cmp01"
   },
   {
     "id": 6,
-    "text": "Which means we now know something permanent. Nine is in its final resting place. Nothing in the rest of the array could possibly be larger, so we never need to look at it again. We mark it as settled, and shrink our working region by one.",
-    "start": 103.438,
-    "end": 119.518,
-    "beat": "lock_tail"
+    "text": "Five is bigger than two, so the pair switches places.",
+    "start": 22.438,
+    "end": 26.59,
+    "beat": "p1_swap01"
   },
   {
     "id": 7,
-    "text": "Now we simply do the whole thing again on what is left. Two against five: fine. Five against one: swap. Five against seven: fine. And once again the largest of the remaining numbers, seven, has been carried to the end of the region. Two numbers are now locked in place.",
-    "start": 119.868,
-    "end": 140.676,
-    "beat": "second_pass"
+    "text": "Slide one step to the right: five against nine.",
+    "start": 26.94,
+    "end": 30.876,
+    "beat": "p1_cmp12"
   },
   {
     "id": 8,
-    "text": "The pattern should be clear now, and notice that each pass is cheaper than the one before it. Two against one: swap. Two against five: fine. Five settles into position, and our unsorted region has shrunk to just the first two entries.",
-    "start": 141.026,
-    "end": 157.97,
-    "beat": "third_pass"
+    "text": "Five is smaller, so this pair is already in order.",
+    "start": 31.226,
+    "end": 35.234,
+    "beat": "p1_keep12"
   },
   {
     "id": 9,
-    "text": "One final comparison. One against two, already in order. And with that, there is nothing left that could possibly be out of place. The array is sorted: one, two, five, seven, nine.",
-    "start": 158.32,
-    "end": 173.224,
-    "beat": "final_pass"
+    "text": "Slide again, and compare nine against one.",
+    "start": 35.584,
+    "end": 39.04,
+    "beat": "p1_cmp23"
   },
   {
     "id": 10,
-    "text": "Now step back and count the work. Each pass walks across the array once, and we need roughly one pass per element. That gives us about n passes of about n comparisons each, so the total cost grows like n squared. Double the size of the input, and you roughly quadruple the work.",
-    "start": 173.574,
-    "end": 192.99,
-    "beat": "complexity"
+    "text": "Nine is the bigger one, so they trade places.",
+    "start": 39.39,
+    "end": 43.062,
+    "beat": "p1_swap23"
   },
   {
     "id": 11,
-    "text": "And that is the trade. Bubble sort is far too slow for serious data, and real sorting algorithms do dramatically better. But it earns its place as a first algorithm, because it shows how a rule simple enough to fit in a single sentence, applied patiently enough times, can impose complete order on chaos.",
-    "start": 193.34,
-    "end": 213.596,
-    "beat": "closing"
+    "text": "One last pair in this pass: nine against seven.",
+    "start": 43.412,
+    "end": 47.42,
+    "beat": "p1_cmp34"
+  },
+  {
+    "id": 12,
+    "text": "Nine wins again, and slides into the final slot.",
+    "start": 47.77,
+    "end": 51.682,
+    "beat": "p1_swap34"
+  },
+  {
+    "id": 13,
+    "text": "The largest number has bubbled all the way to the end.",
+    "start": 52.032,
+    "end": 55.68,
+    "beat": "p1_bubbled"
+  },
+  {
+    "id": 14,
+    "text": "Nine is now in its final resting place, permanently.",
+    "start": 56.03,
+    "end": 60.23,
+    "beat": "p1_lock"
+  },
+  {
+    "id": 15,
+    "text": "Nothing further left can be larger, so we stop looking there.",
+    "start": 60.58,
+    "end": 64.9,
+    "beat": "p1_region"
+  },
+  {
+    "id": 16,
+    "text": "Pass two: repeat the same walk on what is left.",
+    "start": 65.25,
+    "end": 69.066,
+    "beat": "p2_cmp01"
+  },
+  {
+    "id": 17,
+    "text": "Two against five is already in order, so nothing moves.",
+    "start": 69.416,
+    "end": 73.616,
+    "beat": "p2_keep01"
+  },
+  {
+    "id": 18,
+    "text": "Move along to the next pair: five against one.",
+    "start": 73.966,
+    "end": 77.806,
+    "beat": "p2_cmp12"
+  },
+  {
+    "id": 19,
+    "text": "Five is bigger, so once again the two of them swap.",
+    "start": 78.156,
+    "end": 82.044,
+    "beat": "p2_swap12"
+  },
+  {
+    "id": 20,
+    "text": "Five against seven needs no change at all.",
+    "start": 82.394,
+    "end": 85.754,
+    "beat": "p2_cmp23"
+  },
+  {
+    "id": 21,
+    "text": "Seven settles into place, and the sorted tail grows.",
+    "start": 86.104,
+    "end": 90.256,
+    "beat": "p2_lock"
+  },
+  {
+    "id": 22,
+    "text": "Pass three, on a region that has shrunk again.",
+    "start": 90.606,
+    "end": 94.062,
+    "beat": "p3_cmp01"
+  },
+  {
+    "id": 23,
+    "text": "Two is bigger than one, so they trade places.",
+    "start": 94.412,
+    "end": 98.036,
+    "beat": "p3_swap01"
+  },
+  {
+    "id": 24,
+    "text": "Two against five is already in the right order.",
+    "start": 98.386,
+    "end": 101.818,
+    "beat": "p3_cmp12"
+  },
+  {
+    "id": 25,
+    "text": "Five locks into position, leaving just two cells to check.",
+    "start": 102.168,
+    "end": 106.584,
+    "beat": "p3_lock"
+  },
+  {
+    "id": 26,
+    "text": "That leaves one final comparison: one against two.",
+    "start": 106.934,
+    "end": 111.11,
+    "beat": "p4_cmp01"
+  },
+  {
+    "id": 27,
+    "text": "They are already in order, so nothing needs to move.",
+    "start": 111.46,
+    "end": 115.3,
+    "beat": "p4_keep"
+  },
+  {
+    "id": 28,
+    "text": "And with that, every number sits in its final place.",
+    "start": 115.65,
+    "end": 119.514,
+    "beat": "p4_lock"
+  },
+  {
+    "id": 29,
+    "text": "Now step back and count the comparisons we actually made.",
+    "start": 119.864,
+    "end": 124.064,
+    "beat": "cx_count"
+  },
+  {
+    "id": 30,
+    "text": "In general that is n, times n minus one, over two.",
+    "start": 124.414,
+    "end": 128.806,
+    "beat": "cx_general"
+  },
+  {
+    "id": 31,
+    "text": "Which means the cost grows like n squared.",
+    "start": 129.156,
+    "end": 132.54,
+    "beat": "cx_bigo"
+  },
+  {
+    "id": 32,
+    "text": "Double the input, and you roughly quadruple the work.",
+    "start": 132.89,
+    "end": 136.706,
+    "beat": "cx_double"
+  },
+  {
+    "id": 33,
+    "text": "Bubble sort is far too slow for serious data.",
+    "start": 137.056,
+    "end": 140.8,
+    "beat": "end_slow"
+  },
+  {
+    "id": 34,
+    "text": "But it earns its place as a first algorithm.",
+    "start": 141.15,
+    "end": 144.438,
+    "beat": "end_worth"
+  },
+  {
+    "id": 35,
+    "text": "A rule simple enough for one sentence, applied patiently enough times.",
+    "start": 144.788,
+    "end": 149.78,
+    "beat": "end_line"
   }
 ]

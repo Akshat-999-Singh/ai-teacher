@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Binary search reports index three, and stops right there.

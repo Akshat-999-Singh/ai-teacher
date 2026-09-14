@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Nothing further left can be larger, so we stop looking there.

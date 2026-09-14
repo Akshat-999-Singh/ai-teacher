@@ -45,6 +45,10 @@ TTS_CONCURRENCY = 4
 # A caption may lag its narration by at most this much before it reads as wrong.
 CAPTION_TOLERANCE = 0.05
 
+# One sentence per beat, one action per beat. Outside this range a beat is
+# either too coarse to tie an action to its sentence, or too clipped to read.
+BEAT_MIN, BEAT_MAX = 3.0, 6.0
+
 
 def _resolve_ffmpeg() -> str:
     """Point pydub at an ffmpeg binary, preferring the one vendored in the venv."""
@@ -85,9 +89,28 @@ def load_segments(topic: str) -> list[dict]:
     return segments
 
 
-async def _synthesize_one(seg: dict, dest: Path, voice: str, force: bool, sem) -> None:
-    if dest.exists() and dest.stat().st_size > 0 and not force:
-        print(f"  [{seg['id']:>2}] {seg['beat']:<14} cached")
+def _stamp_path(clip_dir: Path, seg: dict) -> Path:
+    """Sidecar recording exactly what text+voice produced the cached clip."""
+    return clip_dir / f"{seg['id']}.txt"
+
+
+def _is_cached(clip_dir: Path, seg: dict, voice: str) -> bool:
+    """Cached only if the clip exists AND was made from this text, in this voice.
+
+    Keying the cache on the file alone is a trap: edit a sentence and you keep
+    the old audio, with timings measured off the wrong clip.
+    """
+    dest = clip_dir / f"{seg['id']}.mp3"
+    stamp = _stamp_path(clip_dir, seg)
+    if not (dest.exists() and dest.stat().st_size > 0 and stamp.exists()):
+        return False
+    return stamp.read_text(encoding="utf-8") == f"{voice}\n{seg['text']}"
+
+
+async def _synthesize_one(seg: dict, clip_dir: Path, voice: str, force: bool, sem) -> None:
+    dest = clip_dir / f"{seg['id']}.mp3"
+    if not force and _is_cached(clip_dir, seg, voice):
+        print(f"  [{seg['id']:>2}] {seg['beat']:<12} cached")
         return
     async with sem:
         for attempt in range(1, MAX_TTS_ATTEMPTS + 1):
@@ -97,22 +120,31 @@ async def _synthesize_one(seg: dict, dest: Path, voice: str, force: bool, sem) -
                 if tmp.stat().st_size == 0:
                     raise RuntimeError("edge-tts produced an empty file")
                 tmp.replace(dest)
-                print(f"  [{seg['id']:>2}] {seg['beat']:<14} synthesized")
+                _stamp_path(clip_dir, seg).write_text(
+                    f"{voice}\n{seg['text']}", encoding="utf-8"
+                )
+                print(f"  [{seg['id']:>2}] {seg['beat']:<12} synthesized")
                 return
             except Exception as exc:  # noqa: BLE001 - network flakiness is the norm here
                 if attempt == MAX_TTS_ATTEMPTS:
                     raise
-                print(f"  [{seg['id']:>2}] {seg['beat']:<14} retry {attempt} ({exc})")
+                print(f"  [{seg['id']:>2}] {seg['beat']:<12} retry {attempt} ({exc})")
                 await asyncio.sleep(2 * attempt)
+
+
+def prune_orphans(segments: list[dict], clip_dir: Path) -> None:
+    """Drop clips whose id is no longer in the script, so nothing stale is muxed."""
+    keep = {str(seg["id"]) for seg in segments}
+    for path in sorted(clip_dir.glob("*")):
+        if path.suffix in {".mp3", ".txt"} and path.stem not in keep:
+            path.unlink()
+            print(f"  pruned {path.name}")
 
 
 async def synthesize_all(segments: list[dict], clip_dir: Path, voice: str, force: bool) -> None:
     sem = asyncio.Semaphore(TTS_CONCURRENCY)
     await asyncio.gather(
-        *(
-            _synthesize_one(seg, clip_dir / f"{seg['id']}.mp3", voice, force, sem)
-            for seg in segments
-        )
+        *(_synthesize_one(seg, clip_dir, voice, force, sem) for seg in segments)
     )
 
 
@@ -124,15 +156,16 @@ def measure_and_time(segments: list[dict], clip_dir: Path, gap: float) -> list[d
         # codec= lets pydub decode straight through ffmpeg, skipping its ffprobe call.
         audio = AudioSegment.from_file(clip, format="mp3", codec="mp3")
         duration = len(audio) / 1000.0
-        timed.append(
-            {
-                "id": seg["id"],
-                "text": seg["text"],
-                "start": round(cursor, 3),
-                "end": round(cursor + duration, 3),
-                "beat": seg["beat"],
-            }
-        )
+        entry = {
+            "id": seg["id"],
+            "text": seg["text"],
+            "start": round(cursor, 3),
+            "end": round(cursor + duration, 3),
+            "beat": seg["beat"],
+        }
+        if seg.get("caption"):  # optional on-screen override of the sentence
+            entry["caption"] = seg["caption"]
+        timed.append(entry)
         cursor += duration + gap
     return timed
 
@@ -154,6 +187,28 @@ def concatenate(segments: list[dict], clip_dir: Path, out_path: Path, gap: float
     out_path.parent.mkdir(parents=True, exist_ok=True)
     master.export(out_path, format="mp3", bitrate="128k")
     return len(master) / 1000.0
+
+
+def report_beat_lengths(timed: list[dict]) -> bool:
+    """Flag beats outside the one-sentence target, longest first."""
+    spans = []
+    for i, seg in enumerate(timed):
+        nxt = timed[i + 1]["start"] if i + 1 < len(timed) else seg["end"]
+        spans.append((seg["beat"], round(nxt - seg["start"], 3)))
+
+    outliers = [(b, s) for b, s in spans if not BEAT_MIN <= s <= BEAT_MAX]
+    lengths = [s for _, s in spans]
+    print(f"\nBeat lengths ({len(spans)} beats, target {BEAT_MIN}-{BEAT_MAX}s):")
+    print(f"  min {min(lengths):.2f}s   mean {sum(lengths) / len(lengths):.2f}s   "
+          f"max {max(lengths):.2f}s")
+    if not outliers:
+        print("  every beat is within target.")
+        return True
+    print(f"  {len(outliers)} outside target:")
+    for beat, span in sorted(outliers, key=lambda x: -x[1]):
+        side = "long" if span > BEAT_MAX else "short"
+        print(f"    {beat:<14} {span:>6.2f}s  ({side})")
+    return False
 
 
 def check_caption_sync(topic: str, timed: list[dict]) -> bool | None:
@@ -248,6 +303,7 @@ def main() -> None:
     segments = load_segments(args.topic)
     clip_dir = AUDIO / args.topic
     clip_dir.mkdir(parents=True, exist_ok=True)
+    prune_orphans(segments, clip_dir)
 
     print(f"\nSynthesizing {len(segments)} segments as {args.voice}:")
     asyncio.run(synthesize_all(segments, clip_dir, args.voice, args.force))
@@ -271,7 +327,9 @@ def main() -> None:
     print(f"  {master_path.relative_to(ROOT)}  {total:.3f}s total")
 
     # Audio is fully written by now, so a failing check never costs you the build.
-    if check_caption_sync(args.topic, timed) is False:
+    lengths_ok = report_beat_lengths(timed)
+    sync_ok = check_caption_sync(args.topic, timed)
+    if sync_ok is False or not lengths_ok:
         sys.exit(1)
 
 

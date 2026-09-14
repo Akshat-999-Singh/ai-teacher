@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Bubble sort is far too slow for serious data.

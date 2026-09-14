@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Rather than scanning, jump straight to the middle, at index four.

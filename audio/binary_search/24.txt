@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Double the array to sixteen, and it costs just one more probe.

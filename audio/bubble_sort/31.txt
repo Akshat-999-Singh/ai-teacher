@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Which means the cost grows like n squared.

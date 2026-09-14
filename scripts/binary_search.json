@@ -1,0 +1,198 @@
+[
+  {
+    "id": 1,
+    "text": "Here is an array of eight numbers, already in sorted order.",
+    "start": 0.0,
+    "end": 4.176,
+    "beat": "intro_array"
+  },
+  {
+    "id": 2,
+    "text": "Sorted is the one thing that binary search absolutely insists on.",
+    "start": 4.526,
+    "end": 9.158,
+    "beat": "intro_sorted"
+  },
+  {
+    "id": 3,
+    "text": "We want to find the value seven, if it is here at all.",
+    "start": 9.508,
+    "end": 13.348,
+    "beat": "intro_target"
+  },
+  {
+    "id": 4,
+    "text": "We begin with a search window covering the entire array.",
+    "start": 13.698,
+    "end": 17.634,
+    "beat": "setup_window"
+  },
+  {
+    "id": 5,
+    "text": "Lo marks the first cell, and hi marks one past the last.",
+    "start": 17.984,
+    "end": 22.616,
+    "beat": "setup_bounds"
+  },
+  {
+    "id": 6,
+    "text": "We will count every comparison, to see how few we need.",
+    "start": 22.966,
+    "end": 27.022,
+    "beat": "rule_count"
+  },
+  {
+    "id": 7,
+    "text": "Rather than scanning, jump straight to the middle, at index four.",
+    "start": 27.372,
+    "end": 32.076,
+    "beat": "p1_mid"
+  },
+  {
+    "id": 8,
+    "text": "The value waiting there is nine, and we are hunting for seven.",
+    "start": 32.426,
+    "end": 36.746,
+    "beat": "p1_compare"
+  },
+  {
+    "id": 9,
+    "text": "Nine is too big, so seven cannot possibly be to its right.",
+    "start": 37.096,
+    "end": 41.8,
+    "beat": "p1_verdict"
+  },
+  {
+    "id": 10,
+    "text": "So hi drops to four, and half the array is discarded.",
+    "start": 42.15,
+    "end": 46.422,
+    "beat": "p1_shrink"
+  },
+  {
+    "id": 11,
+    "text": "One comparison just eliminated four of the eight cells.",
+    "start": 46.772,
+    "end": 50.9,
+    "beat": "p1_left"
+  },
+  {
+    "id": 12,
+    "text": "Take the middle of what survives, which is index two.",
+    "start": 51.25,
+    "end": 55.186,
+    "beat": "p2_mid"
+  },
+  {
+    "id": 13,
+    "text": "The value there is four, which is smaller than seven.",
+    "start": 55.536,
+    "end": 59.352,
+    "beat": "p2_compare"
+  },
+  {
+    "id": 14,
+    "text": "Four is too small, so seven cannot be to its left.",
+    "start": 59.702,
+    "end": 63.758,
+    "beat": "p2_verdict"
+  },
+  {
+    "id": 15,
+    "text": "Lo climbs to three, and the window is down to one cell.",
+    "start": 64.108,
+    "end": 68.38,
+    "beat": "p2_shrink"
+  },
+  {
+    "id": 16,
+    "text": "Two comparisons, and a single candidate is all that remains.",
+    "start": 68.73,
+    "end": 73.338,
+    "beat": "p2_left"
+  },
+  {
+    "id": 17,
+    "text": "The middle of a one cell window is that cell itself.",
+    "start": 73.688,
+    "end": 77.384,
+    "beat": "p3_mid"
+  },
+  {
+    "id": 18,
+    "text": "And the value sitting there is exactly seven.",
+    "start": 77.734,
+    "end": 81.166,
+    "beat": "p3_compare"
+  },
+  {
+    "id": 19,
+    "text": "That is our target, found in only three comparisons.",
+    "start": 81.516,
+    "end": 85.692,
+    "beat": "p3_found"
+  },
+  {
+    "id": 20,
+    "text": "Binary search reports index three, and stops right there.",
+    "start": 86.042,
+    "end": 90.626,
+    "beat": "p3_index"
+  },
+  {
+    "id": 21,
+    "text": "Look at how the window shrank: eight, then four, then one.",
+    "start": 90.976,
+    "end": 95.392,
+    "beat": "an_windows"
+  },
+  {
+    "id": 22,
+    "text": "Every comparison throws away half of whatever is left.",
+    "start": 95.742,
+    "end": 99.798,
+    "beat": "an_half"
+  },
+  {
+    "id": 23,
+    "text": "Three comparisons for eight cells, because two cubed is eight.",
+    "start": 100.148,
+    "end": 104.804,
+    "beat": "an_log"
+  },
+  {
+    "id": 24,
+    "text": "Double the array to sixteen, and it costs just one more probe.",
+    "start": 105.154,
+    "end": 109.666,
+    "beat": "an_double"
+  },
+  {
+    "id": 25,
+    "text": "In general, the cost is the logarithm of n, base two.",
+    "start": 110.016,
+    "end": 114.384,
+    "beat": "an_formula"
+  },
+  {
+    "id": 26,
+    "text": "A linear scan would have to walk the cells one at a time.",
+    "start": 114.734,
+    "end": 118.646,
+    "beat": "end_linear"
+  },
+  {
+    "id": 27,
+    "text": "All that speed is bought with one requirement: the array must be sorted.",
+    "start": 118.996,
+    "end": 123.772,
+    "beat": "end_sorted"
+  },
+  {
+    "id": 28,
+    "text": "Sort once, and then find anything in just a handful of steps.",
+    "start": 124.122,
+    "end": 128.73,
+    "beat": "end_line"
+  }
+]

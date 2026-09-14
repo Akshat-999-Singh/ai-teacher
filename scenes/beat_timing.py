@@ -1,17 +1,21 @@
 """Narration-locked beat timing, shared by every topic scene.
 
-A topic scene subclasses `TimedScene`, sets `TOPIC`, and wraps each group of
-animations in `with self.beat("<beat name>", caption=...)`. The beat is handed
-exactly the wall-clock slot its narration segment occupies in
-scripts/<topic>.json, and its caption is written as the beat's *first* action,
-so the caption changes at the instant that segment's narration begins.
+The contract is one beat per SENTENCE, not per paragraph. A beat owns a single
+narration sentence (target 3-6s), performs exactly one visible action, and
+carries that sentence as its caption. Coarser beats are what make a video
+"feel" out of sync even when the timestamps line up: a 20s caption covers three
+or four actions, so nothing on screen is tied to the words describing it.
 
-Caption placement is a correctness property, not a style choice: a caption
-written partway through a beat is on screen while the narrator is still
-talking about something else. `tools/build_topic.py` dry-runs a scene against
-this contract and reports any beat whose caption is late, so `caption_log` and
-`video_time` below are public surface -- do not rename them without updating
-that check.
+A topic scene subclasses `TimedScene`, sets `TOPIC`, and drives a flat list of
+(beat, action) pairs. `self.beat(name)` hands the block exactly the wall-clock
+slot its sentence occupies in scripts/<topic>.json and writes that sentence's
+caption as the block's *first* action, so the caption changes at the instant
+the sentence begins.
+
+`tools/build_topic.py` dry-runs a scene against this contract and reports any
+beat whose caption is late or whose slot falls outside the target range, so
+`caption_log` and `video_time` below are public surface -- do not rename them
+without updating that check.
 """
 
 from __future__ import annotations
@@ -19,27 +23,37 @@ from __future__ import annotations
 import json
 from contextlib import contextmanager
 from pathlib import Path
+from typing import NamedTuple
 
 from manim import *
 
 ROOT = Path(__file__).resolve().parent.parent
 
 # Used only if a script has not been timed yet, so a scene still renders alone.
-FALLBACK_SLOT = 8.0
+FALLBACK_SLOT = 5.0
 MIN_RUN_TIME = 1 / 30
 
-# A beat's opening caption is deliberately cheap: it must land with the
-# narration, so it gets a small slice taken out of the beat's first animation.
-CAPTION_P = 0.05
+# Beats are short now, so the caption needs a fraction big enough to still read
+# as a deliberate transition at 3s, and a cap so it stays snappy at 6s.
+CAPTION_P = 0.15
 CAPTION_CAP = 0.9
 
 
-def load_timeline(topic: str) -> dict[str, tuple[float, float]]:
-    """Map each beat name to `(start, slot)` in seconds.
+class Beat(NamedTuple):
+    start: float
+    slot: float
+    text: str
+    caption: str
+
+
+def load_timeline(topic: str) -> dict[str, Beat]:
+    """Map each beat name to its `(start, slot, text, caption)`.
 
     A beat's slot runs from its own `start` to the *next* beat's `start`, so
     the silence between narration clips belongs to the beat it follows. The
-    final beat simply runs to its own `end`.
+    final beat simply runs to its own `end`. `caption` defaults to the sentence
+    itself; a segment may override it where the spoken form reads badly on
+    screen (spelled-out numbers, say).
     """
     path = ROOT / "scripts" / f"{topic}.json"
     segments = json.loads(path.read_text(encoding="utf-8"))
@@ -53,7 +67,13 @@ def load_timeline(topic: str) -> dict[str, tuple[float, float]]:
             slot = round(nxt - start, 3)
         else:
             start, slot = i * FALLBACK_SLOT, FALLBACK_SLOT
-        timeline[seg["beat"]] = (start, slot)
+        text = seg["text"]
+        timeline[seg["beat"]] = Beat(
+            start=start,
+            slot=slot,
+            text=text,
+            caption=seg.get("caption") or text.rstrip("."),
+        )
     return timeline
 
 
@@ -63,9 +83,8 @@ class BeatClock:
     Animations ask for a fraction `p` of the beat, capped at a run_time past
     which they would just look sluggish. Time a cap refuses is not lost: it
     goes into `slack`, and the next `hold()` absorbs it. So a beat's spare time
-    lands in the pauses *between* its animations -- where a viewer reads the
-    caption you just put on screen -- instead of piling up as one dead stretch
-    at the end. Keep sum(p) close to 1.0 and end each beat on a hold.
+    lands in the pauses *between* its animations instead of piling up as one
+    dead stretch at the end.
     """
 
     def __init__(self, scene: TimedScene, name: str, total: float):
@@ -118,7 +137,7 @@ class TimedScene(Scene):
     """Base for topic scenes whose animation is locked to measured narration."""
 
     TOPIC: str = ""
-    STATUS_AT = DOWN * 1.7
+    STATUS_AT = DOWN * 1.9
 
     def setup_timing(self) -> None:
         """Call first in construct(), before building any mobjects."""
@@ -128,25 +147,36 @@ class TimedScene(Scene):
         self.current_beat = ""
         self.status = None
 
+    def make_caption(self, text: str) -> Mobject:
+        """Render one sentence as the on-screen caption. Override to restyle."""
+        return Text(text).scale(0.5)
+
     @contextmanager
     def beat(
         self,
         name: str,
-        caption: Mobject | None = None,
+        caption: str | Mobject | None = None,
         caption_p: float = CAPTION_P,
         caption_cap: float = CAPTION_CAP,
     ):
-        """Run a block of animations inside one narration segment's slot.
+        """Run one sentence's worth of animation inside that sentence's slot.
 
-        `caption` is written before anything else in the block, so it appears
-        as the segment's narration starts. Pay for it out of the beat's first
-        animation (drop its `p` by `caption_p`), never by adding to the beat.
+        The caption is written before anything else in the block, so it appears
+        as the sentence starts. It defaults to the sentence itself, taken from
+        the timed script -- one source of truth for what is said and shown.
         """
-        _, slot = self.timeline.get(name, (0.0, FALLBACK_SLOT))
+        info = self.timeline.get(name)
+        if info is None:
+            raise KeyError(f"beat {name!r} is not in scripts/{self.TOPIC}.json")
+
         self.current_beat = name
-        clock = BeatClock(self, name, slot)
-        if caption is not None:
-            self.set_status(clock, caption, p=caption_p, cap=caption_cap)
+        clock = BeatClock(self, name, info.slot)
+
+        text = info.caption if caption is None else caption
+        if text is not None:
+            mobject = self.make_caption(text) if isinstance(text, str) else text
+            self.set_status(clock, mobject, p=caption_p, cap=caption_cap)
+
         yield clock
         clock.finish()
 

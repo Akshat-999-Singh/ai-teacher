@@ -1,0 +1,2 @@
+en-US-AriaNeural
+So hi drops to four, and half the array is discarded.

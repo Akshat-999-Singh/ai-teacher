@@ -1,0 +1,2 @@
+en-US-AriaNeural
+In general, the cost is the logarithm of n, base two.

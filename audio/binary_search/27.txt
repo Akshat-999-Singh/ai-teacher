@@ -1,0 +1,2 @@
+en-US-AriaNeural
+All that speed is bought with one requirement: the array must be sorted.

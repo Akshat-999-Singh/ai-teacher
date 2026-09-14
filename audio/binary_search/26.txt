@@ -1,0 +1,2 @@
+en-US-AriaNeural
+A linear scan would have to walk the cells one at a time.

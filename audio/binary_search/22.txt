@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Every comparison throws away half of whatever is left.
