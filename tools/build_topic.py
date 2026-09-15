@@ -27,6 +27,7 @@ import asyncio
 import importlib.util
 import json
 import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 import edge_tts
@@ -44,6 +45,12 @@ TTS_CONCURRENCY = 4
 
 # A caption may lag its narration by at most this much before it reads as wrong.
 CAPTION_TOLERANCE = 0.05
+
+# Below this vertical gap (scene units), a same-content mobject reads as
+# crowding the caption even when it does not strictly overlap it -- see
+# check_caption_band. Content-matching (not this number) is what keeps
+# unrelated nearby content from false-positiving, so this can run generous.
+CAPTION_CLEARANCE = 0.65
 
 # One sentence per beat, one action per beat. Outside this range a beat is
 # either too coarse to tie an action to its sentence, or too clipped to read.
@@ -211,6 +218,34 @@ def report_beat_lengths(timed: list[dict]) -> bool:
     return False
 
 
+def _load_scene_class(topic: str, purpose: str):
+    """Import scenes/<topic>.py and return its TimedScene subclass, or None.
+
+    Shared by every dry-run check below. Prints its own failure reason (never
+    raises) so a check that cannot load the scene degrades to "skipped" rather
+    than aborting the whole build.
+    """
+    scene_path = SCENES / f"{topic}.py"
+    if not scene_path.exists():
+        print(f"\n{purpose}: no scenes/{topic}.py yet -- skipped.")
+        return None
+
+    class_name = "".join(part.capitalize() for part in topic.split("_"))
+    spec = importlib.util.spec_from_file_location(f"_{purpose}_{topic}", scene_path)
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+        scene_class = getattr(module, class_name)
+    except Exception as exc:  # noqa: BLE001 - report, never fail the audio build
+        print(f"\n{purpose}: could not load {class_name} from {scene_path.name} ({exc})")
+        return None
+
+    if not hasattr(scene_class, "setup_timing"):
+        print(f"\n{purpose}: {class_name} does not subclass TimedScene -- skipped.")
+        return None
+    return scene_class
+
+
 def check_caption_sync(topic: str, timed: list[dict]) -> bool | None:
     """Report when each beat's caption changes vs when its narration starts.
 
@@ -223,24 +258,10 @@ def check_caption_sync(topic: str, timed: list[dict]) -> bool | None:
 
     Returns True/False, or None if the topic has no scene yet.
     """
-    scene_path = SCENES / f"{topic}.py"
-    if not scene_path.exists():
-        print(f"\nCaption sync: no scenes/{topic}.py yet -- skipped.")
+    scene_class = _load_scene_class(topic, "Caption sync")
+    if scene_class is None:
         return None
-
-    class_name = "".join(part.capitalize() for part in topic.split("_"))
-    spec = importlib.util.spec_from_file_location(f"_scene_{topic}", scene_path)
-    module = importlib.util.module_from_spec(spec)
-    try:
-        spec.loader.exec_module(module)
-        scene_class = getattr(module, class_name)
-    except Exception as exc:  # noqa: BLE001 - report, never fail the audio build
-        print(f"\nCaption sync: could not load {class_name} from {scene_path.name} ({exc})")
-        return None
-
-    if not hasattr(scene_class, "setup_timing"):
-        print(f"\nCaption sync: {class_name} does not subclass TimedScene -- skipped.")
-        return None
+    class_name = scene_class.__name__
 
     # Stub the renderer out: BeatClock still accounts for every run_time.
     probe_class = type(
@@ -288,6 +309,169 @@ def check_caption_sync(topic: str, timed: list[dict]) -> bool | None:
     return ok
 
 
+def check_caption_band(topic: str) -> bool | None:
+    r"""Flag a scene attribute that both crowds the caption AND repeats it.
+
+    check_caption_sync verifies *when* a caption appears; this verifies
+    whether anything else reads as a duplicate of it. The bug this was
+    written for was two "O(log n)" labels, one the caption, one a formula,
+    0.55 scene-units apart -- genuinely non-overlapping, yet it read as the
+    same text rendered twice.
+
+    Two designs were tried and rejected before this one:
+
+    - Inspecting Animation objects' internals (`.mobject` / `.target_mobject`)
+      to find "everything on screen": abandoned. Those are Manim's
+      interpolation plumbing, not the scene's content, and a no-op play()
+      never runs that interpolation, so those attributes often hold a
+      degenerate placeholder at construction time. It produced ~80 false
+      positives on a topic with none. What a scene author actually treats as
+      "a thing on screen" is whatever they assign to `self.<name>`, so that is
+      what this inspects instead, via a monkeypatch of `TimedScene.beat()` on
+      the probe subclass only (beat_timing.py is untouched): snapshot
+      `vars(self)` right after each beat's `with` block exits, and check every
+      Mobject-valued attribute's real geometry against `self.status`.
+
+    - Flagging on geometric clearance alone: abandoned. Re-running that
+      version against every shipped topic surfaced clearance well under 0.6
+      units in bubble_sort, binary_search and kadane (kadane's "sum = 6"
+      brace label sits a mere 0.06 units from its caption) -- all of them
+      already-verified-clean beats, because the nearby text says something
+      different from the caption. Geometric proximity alone does not predict
+      "looks like a duplicate"; conversely the real bug's 0.55-unit gap is
+      *larger* than several of those fine cases, so no single clearance
+      threshold gets both right.
+
+    So a finding requires BOTH: clearance under CAPTION_CLEARANCE, AND the
+    two texts normalizing (case, whitespace, LaTeX noise stripped) to the same
+    content, one containing the other. Content matching is intentionally
+    forgiving of some encodings and not others: `\text{O(log n)}` and
+    `O(\log n)` normalize equal (the bug this exists for); `\frac{48}{18}`
+    and `"48 / 18"` do not (different structure, not just different escaping)
+    -- a known, accepted miss, not a silent one.
+
+    Caveat shared with the geometry pass: a no-op play() never applies
+    `.animate` mutations, so an attribute already faded out by the time a beat
+    ends can still be checked at its pre-fade geometry and text. That can only
+    make this over-cautious, never blind to a real, currently-visible one.
+
+    Returns True/False, or None if the topic has no scene yet.
+    """
+    scene_class = _load_scene_class(topic, "Caption band")
+    if scene_class is None:
+        return None
+    class_name = scene_class.__name__
+
+    def bbox(mob) -> tuple[float, float] | None:
+        try:
+            top, bottom = mob.get_top()[1], mob.get_bottom()[1]
+        except Exception:  # noqa: BLE001 - not a drawable Mobject
+            return None
+        if top == bottom == 0:  # Manim's signature for "no points at all"
+            return None
+        return (min(top, bottom), max(top, bottom))
+
+    def describe(mob) -> str:
+        for attr in ("tex_string", "text"):
+            val = getattr(mob, attr, None)
+            if val:
+                return str(val)
+        parts = [d for d in (describe(s) for s in getattr(mob, "submobjects", None) or []) if d]
+        return " ".join(parts)[:50] if parts else type(mob).__name__
+
+    def normalize(s: str) -> str:
+        """Collapse a caption or formula string down to its bare content.
+
+        Strips LaTeX noise so "\\text{O(log n)}" and "O(\\log n)" -- same
+        content, different LaTeX -- compare equal: `\\log`/`\\times` render as
+        the words "log"/"times", so those are *replaced* with the word, not
+        deleted (deleting them was an earlier bug here -- it silently dropped
+        "log" from one side and not the other, so the pair that motivated this
+        whole check stopped matching). Pure layout commands (`\\text{}`,
+        spacing macros) render no text of their own, so those ARE deleted.
+        Does not chase every notation gap (`\\frac{a}{b}` vs "a / b" still
+        compare unequal, different structure, not just different escaping) --
+        a known, accepted miss, not a silent one.
+        """
+        s = s.lower().replace(r"\log", "log").replace(r"\times", "times")
+        for token in (r"\text", r"\;", r"\,", r"\!"):
+            s = s.replace(token, "")
+        return "".join(ch for ch in s if ch.isalnum())
+
+    def looks_duplicated(a: str, b: str) -> bool:
+        na, nb = normalize(a), normalize(b)
+        if not na or not nb:
+            return False
+        shorter, longer = (na, nb) if len(na) <= len(nb) else (nb, na)
+        return shorter in longer  # exact match is the len(na)==len(nb) case
+
+    def iter_mobjects(value):
+        """Yield every Mobject reachable from a scene attribute's value."""
+        if value is None:
+            return
+        if isinstance(value, (list, tuple, set)):
+            for item in value:
+                yield from iter_mobjects(item)
+            return
+        if hasattr(value, "get_top") and hasattr(value, "get_bottom"):
+            yield value
+
+    findings: list[tuple[str, str, float]] = []
+    original_beat = scene_class.beat  # wrapped below; beat_timing.py itself is untouched
+
+    @contextmanager
+    def probe_beat(self, name, *a, **kw):
+        with original_beat(self, name, *a, **kw) as clock:
+            yield clock
+        status = getattr(self, "status", None)
+        caption_box = bbox(status) if status is not None else None
+        if caption_box is None:
+            return
+        cap_lo, cap_hi = caption_box
+        caption_text = describe(status)
+        for attr_name, value in vars(self).items():
+            for mob in iter_mobjects(value):
+                if mob is status:
+                    continue
+                box = bbox(mob)
+                if box is None:
+                    continue
+                lo, hi = box
+                gap = cap_lo - hi if hi < cap_lo else (lo - cap_hi if lo > cap_hi else 0.0)
+                # Close alone is common and often fine (see kadane's "sum = 6"
+                # sitting 0.06 units from an unrelated caption); it only reads as
+                # a defect when the two pieces of text also say the same thing.
+                if gap < CAPTION_CLEARANCE and looks_duplicated(caption_text, describe(mob)):
+                    findings.append((name, f"self.{attr_name}: {describe(mob)}", gap))
+
+    probe_class = type(
+        f"{class_name}BandProbe",
+        (scene_class,),
+        {
+            "play": lambda self, *a, **k: None,
+            "wait": lambda self, duration=1.0, **k: None,
+            "add": lambda self, *a, **k: None,
+            "beat": probe_beat,
+        },
+    )
+    probe = object.__new__(probe_class)  # skip Scene.__init__; there is no renderer
+    try:
+        probe.construct()
+    except Exception as exc:  # noqa: BLE001
+        print(f"\nCaption band: dry run of {class_name} failed ({exc})")
+        return None
+
+    print(f"\nCaption band (min {CAPTION_CLEARANCE} unit clearance from the caption):")
+    if not findings:
+        print("  nothing crowds the caption.")
+        return True
+    print(f"  {len(findings)} beat(s) too close:")
+    for beat, what, gap in findings:
+        print(f"    {beat:<16} {what[:48]!r:<50} gap={gap:+.3f}")
+    print(f"  CAPTION BAND FAILED (min clearance {CAPTION_CLEARANCE}).")
+    return False
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build narration audio + timings for a topic.")
     parser.add_argument("topic", help="topic name, e.g. bubble_sort")
@@ -329,7 +513,8 @@ def main() -> None:
     # Audio is fully written by now, so a failing check never costs you the build.
     lengths_ok = report_beat_lengths(timed)
     sync_ok = check_caption_sync(args.topic, timed)
-    if sync_ok is False or not lengths_ok:
+    band_ok = check_caption_band(args.topic)
+    if sync_ok is False or band_ok is False or not lengths_ok:
         sys.exit(1)
 
 

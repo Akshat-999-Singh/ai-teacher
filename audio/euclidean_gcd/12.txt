@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Cut a six by six square from the strip.

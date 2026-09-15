@@ -1,0 +1,195 @@
+[
+  {
+    "id": 1,
+    "text": "Here is a rectangle, forty eight units wide and eighteen tall.",
+    "start": 0.0,
+    "end": 4.584,
+    "beat": "intro_rect",
+    "caption": "48 wide, 18 tall"
+  },
+  {
+    "id": 2,
+    "text": "We want the greatest common divisor of forty eight and eighteen.",
+    "start": 4.934,
+    "end": 9.062,
+    "beat": "intro_goal",
+    "caption": "goal: gcd(48, 18)"
+  },
+  {
+    "id": 3,
+    "text": "This is the trick Euclid described over two thousand years ago.",
+    "start": 9.412,
+    "end": 13.732,
+    "beat": "intro_history"
+  },
+  {
+    "id": 4,
+    "text": "The rule is simple: always cut the largest square that fits.",
+    "start": 14.082,
+    "end": 18.546,
+    "beat": "intro_rule"
+  },
+  {
+    "id": 5,
+    "text": "We stop the moment a square uses up what remains exactly.",
+    "start": 18.896,
+    "end": 23.144,
+    "beat": "intro_stop"
+  },
+  {
+    "id": 6,
+    "text": "We will also write the arithmetic down as we go.",
+    "start": 23.494,
+    "end": 27.07,
+    "beat": "intro_track"
+  },
+  {
+    "id": 7,
+    "text": "Cut an eighteen by eighteen square from the left.",
+    "start": 27.42,
+    "end": 31.044,
+    "beat": "s1_square1",
+    "caption": "18 x 18 square"
+  },
+  {
+    "id": 8,
+    "text": "A second eighteen by eighteen square fits right beside it.",
+    "start": 31.394,
+    "end": 35.642,
+    "beat": "s1_square2",
+    "caption": "18 x 18 square"
+  },
+  {
+    "id": 9,
+    "text": "Forty eight splits into two eighteens, with twelve left over.",
+    "start": 35.992,
+    "end": 40.456,
+    "beat": "s1_remainder",
+    "caption": "48 = 2 x 18 + 12"
+  },
+  {
+    "id": 10,
+    "text": "Now cut the largest square that fits: twelve by twelve.",
+    "start": 40.806,
+    "end": 45.006,
+    "beat": "s2_square1",
+    "caption": "12 x 12 square"
+  },
+  {
+    "id": 11,
+    "text": "Eighteen splits into one twelve, with six left over.",
+    "start": 45.356,
+    "end": 49.532,
+    "beat": "s2_remainder",
+    "caption": "18 = 1 x 12 + 6"
+  },
+  {
+    "id": 12,
+    "text": "Cut a six by six square from the strip.",
+    "start": 49.882,
+    "end": 53.218,
+    "beat": "s3_square1",
+    "caption": "6 x 6 square"
+  },
+  {
+    "id": 13,
+    "text": "A second six by six square, and nothing is left.",
+    "start": 53.568,
+    "end": 57.552,
+    "beat": "s3_square2",
+    "caption": "6 x 6 square"
+  },
+  {
+    "id": 14,
+    "text": "Twelve splits into two sixes, with nothing left over.",
+    "start": 57.902,
+    "end": 62.102,
+    "beat": "s3_remainder",
+    "caption": "12 = 2 x 6 + 0"
+  },
+  {
+    "id": 15,
+    "text": "The last square has side six: that is our answer.",
+    "start": 62.452,
+    "end": 66.436,
+    "beat": "gcd_reveal",
+    "caption": "gcd = 6"
+  },
+  {
+    "id": 16,
+    "text": "Every square we cut traces back to that one number.",
+    "start": 66.786,
+    "end": 70.506,
+    "beat": "gcd_why"
+  },
+  {
+    "id": 17,
+    "text": "Now clear the cuts and look at the rectangle again.",
+    "start": 70.856,
+    "end": 74.528,
+    "beat": "retile_intro"
+  },
+  {
+    "id": 18,
+    "text": "Six by six squares tile it perfectly: eight across, three down.",
+    "start": 74.878,
+    "end": 79.87,
+    "beat": "retile_grid"
+  },
+  {
+    "id": 19,
+    "text": "No gaps, no overlaps, every square lines up exactly.",
+    "start": 80.22,
+    "end": 84.948,
+    "beat": "retile_proof"
+  },
+  {
+    "id": 20,
+    "text": "Try a bigger square and it no longer fits evenly.",
+    "start": 85.298,
+    "end": 89.09,
+    "beat": "retile_toobig"
+  },
+  {
+    "id": 21,
+    "text": "The geometry and the arithmetic agree at every single step.",
+    "start": 89.44,
+    "end": 93.928,
+    "beat": "an_recap"
+  },
+  {
+    "id": 22,
+    "text": "Each step shrinks the numbers fast, so this finishes quickly.",
+    "start": 94.278,
+    "end": 98.79,
+    "beat": "an_onlogsteps"
+  },
+  {
+    "id": 23,
+    "text": "Checking every possible common divisor by hand would take far longer.",
+    "start": 99.14,
+    "end": 103.964,
+    "beat": "an_contrast"
+  },
+  {
+    "id": 24,
+    "text": "That same six also reduces the fraction to eight over three.",
+    "start": 104.314,
+    "end": 108.826,
+    "beat": "an_fraction"
+  },
+  {
+    "id": 25,
+    "text": "One rectangle, a few cuts, and the shared size falls out.",
+    "start": 109.176,
+    "end": 113.808,
+    "beat": "an_summary"
+  },
+  {
+    "id": 26,
+    "text": "That is the geometry hiding behind the Euclidean algorithm.",
+    "start": 114.158,
+    "end": 118.478,
+    "beat": "end_line"
+  }
+]

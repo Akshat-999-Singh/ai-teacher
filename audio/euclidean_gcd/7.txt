@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Cut an eighteen by eighteen square from the left.

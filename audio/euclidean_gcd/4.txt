@@ -1,0 +1,2 @@
+en-US-AriaNeural
+The rule is simple: always cut the largest square that fits.

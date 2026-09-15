@@ -1,0 +1,2 @@
+en-US-AriaNeural
+One rectangle, a few cuts, and the shared size falls out.

@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Each step shrinks the numbers fast, so this finishes quickly.
