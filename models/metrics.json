@@ -1,0 +1,695 @@
+{
+  "seed": 42,
+  "n_train": 320,
+  "n_test": 80,
+  "accuracy": 0.5625,
+  "artefact_risk_flag": false,
+  "artefact_risk_note": null,
+  "classification_report": {
+    "arrays": {
+      "precision": 0.4,
+      "recall": 0.4444444444444444,
+      "f1-score": 0.42105263157894735,
+      "support": 9.0
+    },
+    "dynamic_programming": {
+      "precision": 0.3333333333333333,
+      "recall": 0.4444444444444444,
+      "f1-score": 0.38095238095238093,
+      "support": 9.0
+    },
+    "graphs": {
+      "precision": 0.875,
+      "recall": 0.7777777777777778,
+      "f1-score": 0.8235294117647058,
+      "support": 9.0
+    },
+    "linked_list": {
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1-score": 0.8571428571428571,
+      "support": 8.0
+    },
+    "math": {
+      "precision": 0.5,
+      "recall": 0.5555555555555556,
+      "f1-score": 0.5263157894736842,
+      "support": 9.0
+    },
+    "physics": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 9.0
+    },
+    "searching": {
+      "precision": 0.5384615384615384,
+      "recall": 0.7777777777777778,
+      "f1-score": 0.6363636363636364,
+      "support": 9.0
+    },
+    "sorting": {
+      "precision": 0.25,
+      "recall": 0.2222222222222222,
+      "f1-score": 0.23529411764705882,
+      "support": 9.0
+    },
+    "stack": {
+      "precision": 0.25,
+      "recall": 0.1111111111111111,
+      "f1-score": 0.15384615384615385,
+      "support": 9.0
+    },
+    "accuracy": 0.5625,
+    "macro avg": {
+      "precision": 0.5718660968660969,
+      "recall": 0.5648148148148147,
+      "f1-score": 0.5593885531966027,
+      "support": 80.0
+    },
+    "weighted avg": {
+      "precision": 0.5665144230769231,
+      "recall": 0.5625,
+      "f1-score": 0.5556666243972745,
+      "support": 80.0
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "arrays",
+      "dynamic_programming",
+      "graphs",
+      "linked_list",
+      "math",
+      "physics",
+      "searching",
+      "sorting",
+      "stack"
+    ],
+    "matrix": [
+      [
+        4,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      [
+        1,
+        4,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        7,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        6,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        1,
+        3,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        9,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        7,
+        1,
+        0
+      ],
+      [
+        2,
+        1,
+        0,
+        0,
+        2,
+        0,
+        2,
+        2,
+        0
+      ],
+      [
+        1,
+        2,
+        1,
+        0,
+        1,
+        0,
+        1,
+        2,
+        1
+      ]
+    ]
+  },
+  "top_confused_pairs_directional": [
+    {
+      "true": "math",
+      "predicted": "dynamic_programming",
+      "count": 3
+    },
+    {
+      "true": "arrays",
+      "predicted": "sorting",
+      "count": 2
+    },
+    {
+      "true": "dynamic_programming",
+      "predicted": "stack",
+      "count": 2
+    },
+    {
+      "true": "sorting",
+      "predicted": "arrays",
+      "count": 2
+    },
+    {
+      "true": "sorting",
+      "predicted": "math",
+      "count": 2
+    },
+    {
+      "true": "sorting",
+      "predicted": "searching",
+      "count": 2
+    },
+    {
+      "true": "stack",
+      "predicted": "dynamic_programming",
+      "count": 2
+    },
+    {
+      "true": "stack",
+      "predicted": "sorting",
+      "count": 2
+    },
+    {
+      "true": "arrays",
+      "predicted": "dynamic_programming",
+      "count": 1
+    },
+    {
+      "true": "arrays",
+      "predicted": "searching",
+      "count": 1
+    }
+  ],
+  "top_confused_pairs_aggregated": [
+    {
+      "pair": [
+        "arrays",
+        "sorting"
+      ],
+      "count": 4
+    },
+    {
+      "pair": [
+        "dynamic_programming",
+        "math"
+      ],
+      "count": 4
+    },
+    {
+      "pair": [
+        "dynamic_programming",
+        "stack"
+      ],
+      "count": 4
+    },
+    {
+      "pair": [
+        "searching",
+        "sorting"
+      ],
+      "count": 3
+    },
+    {
+      "pair": [
+        "arrays",
+        "dynamic_programming"
+      ],
+      "count": 2
+    },
+    {
+      "pair": [
+        "arrays",
+        "stack"
+      ],
+      "count": 2
+    },
+    {
+      "pair": [
+        "dynamic_programming",
+        "searching"
+      ],
+      "count": 2
+    },
+    {
+      "pair": [
+        "math",
+        "sorting"
+      ],
+      "count": 2
+    },
+    {
+      "pair": [
+        "sorting",
+        "stack"
+      ],
+      "count": 2
+    },
+    {
+      "pair": [
+        "arrays",
+        "linked_list"
+      ],
+      "count": 1
+    }
+  ],
+  "top_features_per_class": {
+    "arrays": [
+      {
+        "feature": "matrix",
+        "weight": 1.1008328489942891
+      },
+      {
+        "feature": "value",
+        "weight": 0.9796677785445325
+      },
+      {
+        "feature": "string",
+        "weight": 0.8595851671398159
+      },
+      {
+        "feature": "of",
+        "weight": 0.7652877134338893
+      },
+      {
+        "feature": "nums",
+        "weight": 0.750718615617415
+      },
+      {
+        "feature": "words",
+        "weight": 0.7469868044698476
+      },
+      {
+        "feature": "array",
+        "weight": 0.6741983486650737
+      },
+      {
+        "feature": "indexed",
+        "weight": 0.6056346814127046
+      },
+      {
+        "feature": "lucky",
+        "weight": 0.546231665622645
+      },
+      {
+        "feature": "rectangles",
+        "weight": 0.5281304814551018
+      }
+    ],
+    "dynamic_programming": [
+      {
+        "feature": "subsequence",
+        "weight": 1.005121166952004
+      },
+      {
+        "feature": "stock",
+        "weight": 0.8939185336209681
+      },
+      {
+        "feature": "longest",
+        "weight": 0.7378880488680596
+      },
+      {
+        "feature": "dictionary",
+        "weight": 0.7041975304943232
+      },
+      {
+        "feature": "subtext",
+        "weight": 0.687063095389154
+      },
+      {
+        "feature": "palindromic",
+        "weight": 0.6711832067950527
+      },
+      {
+        "feature": "10",
+        "weight": 0.6498292486493197
+      },
+      {
+        "feature": "day",
+        "weight": 0.5781443107048109
+      },
+      {
+        "feature": "subarray",
+        "weight": 0.5627678945509451
+      },
+      {
+        "feature": "xor",
+        "weight": 0.539698771261544
+      }
+    ],
+    "graphs": [
+      {
+        "feature": "tree",
+        "weight": 2.01003244920353
+      },
+      {
+        "feature": "node",
+        "weight": 1.8439247080420615
+      },
+      {
+        "feature": "binary",
+        "weight": 1.182903947833734
+      },
+      {
+        "feature": "nodes",
+        "weight": 1.14869294048659
+      },
+      {
+        "feature": "root",
+        "weight": 1.1277539195181796
+      },
+      {
+        "feature": "leaf",
+        "weight": 0.9027169514102903
+      },
+      {
+        "feature": "cell",
+        "weight": 0.8266199769069301
+      },
+      {
+        "feature": "from",
+        "weight": 0.7462302650062382
+      },
+      {
+        "feature": "edges",
+        "weight": 0.7034249327942318
+      },
+      {
+        "feature": "water",
+        "weight": 0.6961088247413796
+      }
+    ],
+    "linked_list": [
+      {
+        "feature": "list",
+        "weight": 3.238903905494214
+      },
+      {
+        "feature": "linked",
+        "weight": 2.856893604114449
+      },
+      {
+        "feature": "head",
+        "weight": 1.8525752358820842
+      },
+      {
+        "feature": "next",
+        "weight": 0.99426345692068
+      },
+      {
+        "feature": "node",
+        "weight": 0.9108241637545511
+      },
+      {
+        "feature": "nodes",
+        "weight": 0.8965177924725141
+      },
+      {
+        "feature": "lists",
+        "weight": 0.6838562572720364
+      },
+      {
+        "feature": "singly",
+        "weight": 0.6753330921706815
+      },
+      {
+        "feature": "the",
+        "weight": 0.6567544910662628
+      },
+      {
+        "feature": "pointer",
+        "weight": 0.5952458911071014
+      }
+    ],
+    "math": [
+      {
+        "feature": "num",
+        "weight": 0.9638503630270335
+      },
+      {
+        "feature": "positive",
+        "weight": 0.7412857524711544
+      },
+      {
+        "feature": "integers",
+        "weight": 0.7323974450211846
+      },
+      {
+        "feature": "sum",
+        "weight": 0.7164638381568321
+      },
+      {
+        "feature": "factor",
+        "weight": 0.6875040380666453
+      },
+      {
+        "feature": "as",
+        "weight": 0.6863636978844797
+      },
+      {
+        "feature": "integer",
+        "weight": 0.5569375621103034
+      },
+      {
+        "feature": "multiple",
+        "weight": 0.5502643081733164
+      },
+      {
+        "feature": "numbers",
+        "weight": 0.5261816096808599
+      },
+      {
+        "feature": "points",
+        "weight": 0.5168760870533259
+      }
+    ],
+    "physics": [
+      {
+        "feature": "find",
+        "weight": 1.4104315668964231
+      },
+      {
+        "feature": "metres",
+        "weight": 1.2496981284093611
+      },
+      {
+        "feature": "per",
+        "weight": 1.068754335091787
+      },
+      {
+        "feature": "acceleration",
+        "weight": 1.019306946290951
+      },
+      {
+        "feature": "velocity",
+        "weight": 0.988140415351067
+      },
+      {
+        "feature": "second",
+        "weight": 0.8417308246675349
+      },
+      {
+        "feature": "degrees",
+        "weight": 0.7770038060543596
+      },
+      {
+        "feature": "determine",
+        "weight": 0.7465716193539177
+      },
+      {
+        "feature": "speed",
+        "weight": 0.7278349928715816
+      },
+      {
+        "feature": "at",
+        "weight": 0.6956386180199895
+      }
+    ],
+    "searching": [
+      {
+        "feature": "an",
+        "weight": 0.7867966284863889
+      },
+      {
+        "feature": "arr",
+        "weight": 0.7813699461964625
+      },
+      {
+        "feature": "nums",
+        "weight": 0.7739065934491556
+      },
+      {
+        "feature": "sorted",
+        "weight": 0.7715975289578897
+      },
+      {
+        "feature": "element",
+        "weight": 0.758728553880462
+      },
+      {
+        "feature": "special",
+        "weight": 0.7412152393404763
+      },
+      {
+        "feature": "target",
+        "weight": 0.6604050864259994
+      },
+      {
+        "feature": "arrays",
+        "weight": 0.6585180814908742
+      },
+      {
+        "feature": "pairs",
+        "weight": 0.6339915128989139
+      },
+      {
+        "feature": "log",
+        "weight": 0.6293491228755627
+      }
+    ],
+    "sorting": [
+      {
+        "feature": "order",
+        "weight": 0.8598147483078921
+      },
+      {
+        "feature": "points",
+        "weight": 0.8587468954082456
+      },
+      {
+        "feature": "elements",
+        "weight": 0.7045160436029513
+      },
+      {
+        "feature": "distinct",
+        "weight": 0.6982791138958957
+      },
+      {
+        "feature": "array",
+        "weight": 0.6820712589366056
+      },
+      {
+        "feature": "maximum",
+        "weight": 0.5903549068740541
+      },
+      {
+        "feature": "you",
+        "weight": 0.5831294889946765
+      },
+      {
+        "feature": "an",
+        "weight": 0.5744244083851097
+      },
+      {
+        "feature": "median",
+        "weight": 0.5345696285174105
+      },
+      {
+        "feature": "strings",
+        "weight": 0.5292858009073008
+      }
+    ],
+    "stack": [
+      {
+        "feature": "stack",
+        "weight": 0.9858479559925081
+      },
+      {
+        "feature": "string",
+        "weight": 0.9623152998836313
+      },
+      {
+        "feature": "traversal",
+        "weight": 0.8739421337861722
+      },
+      {
+        "feature": "subarray",
+        "weight": 0.8648267316908628
+      },
+      {
+        "feature": "balanced",
+        "weight": 0.7910951806623718
+      },
+      {
+        "feature": "its",
+        "weight": 0.7704927756581248
+      },
+      {
+        "feature": "parentheses",
+        "weight": 0.7189559062934736
+      },
+      {
+        "feature": "characters",
+        "weight": 0.6391884661637824
+      },
+      {
+        "feature": "nums",
+        "weight": 0.6344505938686377
+      },
+      {
+        "feature": "brackets",
+        "weight": 0.6196615349114829
+      }
+    ]
+  }
+}
