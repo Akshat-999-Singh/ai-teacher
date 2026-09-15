@@ -1,0 +1,2 @@
+en-US-AriaNeural
+BFS sweeps level by level, in order of distance from the start.

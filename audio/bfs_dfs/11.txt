@@ -1,0 +1,2 @@
+en-US-AriaNeural
+DFS pushed six and seven, so seven comes off the top.

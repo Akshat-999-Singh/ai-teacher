@@ -1,0 +1,184 @@
+[
+  {
+    "id": 1,
+    "text": "Here is one small graph with seven nodes, drawn twice.",
+    "start": 0.0,
+    "end": 4.368,
+    "beat": "intro_graph"
+  },
+  {
+    "id": 2,
+    "text": "On the left runs breadth first search, on the right depth first.",
+    "start": 4.718,
+    "end": 9.35,
+    "beat": "intro_sides"
+  },
+  {
+    "id": 3,
+    "text": "Each keeps a frontier: a queue on the left, a stack on the right.",
+    "start": 9.7,
+    "end": 14.428,
+    "beat": "intro_frontier"
+  },
+  {
+    "id": 4,
+    "text": "A queue hands back its oldest item, a stack its newest.",
+    "start": 14.778,
+    "end": 19.098,
+    "beat": "intro_exits"
+  },
+  {
+    "id": 5,
+    "text": "Both searches begin by putting node one into their frontier.",
+    "start": 19.448,
+    "end": 23.672,
+    "beat": "intro_seed"
+  },
+  {
+    "id": 6,
+    "text": "BFS takes node one from the queue, and adds two and three.",
+    "start": 24.022,
+    "end": 28.654,
+    "beat": "v1_bfs"
+  },
+  {
+    "id": 7,
+    "text": "DFS takes node one from the stack, and pushes two and three.",
+    "start": 29.004,
+    "end": 33.708,
+    "beat": "v1_dfs"
+  },
+  {
+    "id": 8,
+    "text": "BFS takes two from the front, adding new neighbors four and five.",
+    "start": 34.058,
+    "end": 39.026,
+    "beat": "v2_bfs"
+  },
+  {
+    "id": 9,
+    "text": "DFS takes three off the top, since it went on last.",
+    "start": 39.376,
+    "end": 43.696,
+    "beat": "v2_dfs"
+  },
+  {
+    "id": 10,
+    "text": "BFS takes three next, adding its new neighbors six and seven.",
+    "start": 44.046,
+    "end": 48.99,
+    "beat": "v3_bfs"
+  },
+  {
+    "id": 11,
+    "text": "DFS pushed six and seven, so seven comes off the top.",
+    "start": 49.34,
+    "end": 54.164,
+    "beat": "v3_dfs"
+  },
+  {
+    "id": 12,
+    "text": "BFS reaches four, a leaf, so nothing new joins the queue.",
+    "start": 54.514,
+    "end": 59.362,
+    "beat": "v4_bfs"
+  },
+  {
+    "id": 13,
+    "text": "DFS takes six, also a leaf, leaving only two on the stack.",
+    "start": 59.712,
+    "end": 64.8,
+    "beat": "v4_dfs"
+  },
+  {
+    "id": 14,
+    "text": "BFS takes five, another leaf, with six and seven still queued.",
+    "start": 65.15,
+    "end": 70.31,
+    "beat": "v5_bfs"
+  },
+  {
+    "id": 15,
+    "text": "DFS finally backs up to two, and pushes four and five.",
+    "start": 70.66,
+    "end": 75.388,
+    "beat": "v5_dfs"
+  },
+  {
+    "id": 16,
+    "text": "BFS takes six from the front, leaving only seven in the queue.",
+    "start": 75.738,
+    "end": 80.442,
+    "beat": "v6_bfs"
+  },
+  {
+    "id": 17,
+    "text": "Five went on last, so DFS takes five before four.",
+    "start": 80.792,
+    "end": 85.496,
+    "beat": "v6_dfs"
+  },
+  {
+    "id": 18,
+    "text": "BFS takes seven, and its queue is finally empty.",
+    "start": 85.846,
+    "end": 90.118,
+    "beat": "v7_bfs"
+  },
+  {
+    "id": 19,
+    "text": "DFS takes four, and its stack is empty too.",
+    "start": 90.468,
+    "end": 94.5,
+    "beat": "v7_dfs"
+  },
+  {
+    "id": 20,
+    "text": "The code was identical: only the queue and the stack differ.",
+    "start": 94.85,
+    "end": 99.17,
+    "beat": "an_same"
+  },
+  {
+    "id": 21,
+    "text": "BFS visited the nodes in the order one through seven.",
+    "start": 99.52,
+    "end": 103.456,
+    "beat": "an_bfs_order"
+  },
+  {
+    "id": 22,
+    "text": "DFS finished the whole right branch before it came back to two.",
+    "start": 103.806,
+    "end": 108.342,
+    "beat": "an_dfs_order"
+  },
+  {
+    "id": 23,
+    "text": "BFS sweeps level by level, in order of distance from the start.",
+    "start": 108.692,
+    "end": 113.54,
+    "beat": "an_levels"
+  },
+  {
+    "id": 24,
+    "text": "DFS commits to one branch and follows it all the way down.",
+    "start": 113.89,
+    "end": 118.306,
+    "beat": "an_branch"
+  },
+  {
+    "id": 25,
+    "text": "Both visit each node once, so the cost is nodes plus edges.",
+    "start": 118.656,
+    "end": 123.336,
+    "beat": "an_cost"
+  },
+  {
+    "id": 26,
+    "text": "A queue spreads the search wide, while a stack sends it deep.",
+    "start": 123.686,
+    "end": 128.054,
+    "beat": "end_line"
+  }
+]

@@ -47,5 +47,12 @@
     "video": "rendered/insertion_sort.mp4",
     "script": "scripts/insertion_sort.json",
     "scene": "scenes/insertion_sort.py"
+  },
+  "bfs_dfs": {
+    "title": "BFS and DFS",
+    "category": "searching",
+    "video": "rendered/bfs_dfs.mp4",
+    "script": "scripts/bfs_dfs.json",
+    "scene": "scenes/bfs_dfs.py"
   }
 }

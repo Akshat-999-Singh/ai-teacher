@@ -1,0 +1,2 @@
+en-US-AriaNeural
+BFS takes six from the front, leaving only seven in the queue.
