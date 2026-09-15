@@ -1,6 +1,6 @@
 ---
 name: new-topic
-description: Build an AI-teacher topic end to end - sentence-level narration JSON, a TimedScene with caption-first beats, edge-tts with measured timings, both sync checks, then render and mux to rendered/<topic>.mp4. Use when asked to build, add, or create a topic ("build topic 3: quicksort"), or to fix narration/animation sync in an existing one.
+description: Build an AI-teacher topic end to end from just a topic name - a visual brief (generated and trace-checked when none is supplied), sentence-level narration JSON, a TimedScene with caption-first beats, edge-tts with measured timings, both sync checks, then render and mux to rendered/<topic>.mp4. Use when asked to build, add, or create a topic ("build topic 3: quicksort"), or to fix narration/animation sync in an existing one.
 ---
 
 # Building a topic
@@ -8,11 +8,13 @@ description: Build an AI-teacher topic end to end - sentence-level narration JSO
 Two topics are built this way: `bubble_sort` (35 beats, 149.78s) and
 `binary_search` (28 beats, 128.73s). Read either as a worked example --
 `scenes/binary_search.py` is the cleaner one. Everything below is the contract
-they share; a new topic needs only a name and a visual brief.
+they share. A new topic needs only a name: `/new-topic <topic> [visual brief]`.
+A supplied brief is used as given; without one, Step B writes it.
 
 ## Output contract
 
 ```
+scripts/<topic>.brief.md  the visual brief - written by Step B, or the supplied brief verbatim
 scripts/<topic>.json    [{id, text, start, end, beat}]  - start/end written by the tool
 scenes/<topic>.py       one TimedScene subclass, class name = CamelCase(topic)
 audio/<topic>/<id>.mp3  one clip per sentence (+ <id>.txt cache stamp)
@@ -49,6 +51,86 @@ exits 0 -- the scene reads its run_times out of the timed JSON, and rendering
 against untimed JSON silently falls back to `FALLBACK_SLOT` (5s/beat).
 
 Use the venv on D:. Not the global Python, not `D:\manimations\.venv`.
+
+## Step B - the visual brief (skip when one was supplied)
+
+If the request includes a brief, save it verbatim to `scripts/<topic>.brief.md`
+and go to Step 0. It is the spec: use it as given, and do not run this step.
+
+If the request is only a topic name ("derivatives"), write the brief here, before
+any narration. The brief carries most of the visual thinking. Narration and scene
+only execute it.
+
+1. **Name it.** The topic id is the request in lowercase snake_case
+   (`derivatives`). Choose a sidebar title and one classifier category:
+   `dynamic_programming`, `math`, `physics`, `searching`, `sorting` or `stack`.
+   render_topic needs both. If none of the six fits, stop and say so, because no
+   question could ever be routed to the topic.
+
+2. **Survey what exists.** Run
+   `./.venv/Scripts/python.exe tools/visual_vocab.py --exclude <topic>`. For
+   every listed topic it prints what the topic is about, what it draws and how
+   things move. Then read the docstrings of the nearest one or two scenes.
+   Signature devices live there, not in class names: insertion sort's lifted key
+   and dashed hole, the GCD's square carving, projectile motion's two shadows.
+   If an existing topic already teaches the same idea (`derivative` exists when
+   `derivatives` is requested), the new brief needs a different **teaching
+   moment**, not just a different look. If there is no honest second angle, stop
+   and say the topic duplicates the existing one.
+
+3. **Choose the input and trace it.** This is Step 0, done now, before the
+   input is committed. Pick concrete values. Write a throwaway script that runs
+   the algorithm, or computes every quantity the video will show, and prints
+   each step. Reject the input and pick another if it is degenerate:
+   - the process ends before its core step repeats (binary search: found on probe 1)
+   - a branch the teaching moment depends on never fires (Kadane: no negative
+     running sum, so it never resets)
+   - two things the viewer must tell apart coincide on screen (two pointers on one
+     index; a zero slope drawn along the x-axis; a secant that already *is* the
+     tangent because f is linear)
+   - the steps cannot fill 25-35 one-action beats, or need far more
+   - numbers the narration must say are unreadable, or values fall outside the
+     layout budget
+
+   Every rejected input goes in the brief, with its trace and the reason. Never
+   drop one silently.
+
+4. **Write `scripts/<topic>.brief.md`** with exactly these sections:
+
+   ```markdown
+   # <Title>: visual brief
+
+   topic: <topic> | title: <Title> | category: <category> | source: generated (Step B)
+
+   ## Input
+   The concrete values, and why they teach.
+   Rejected: each rejected input and the degenerate case it produced, or "none".
+
+   ## Trace
+   The trace script's printed output for the chosen input, verbatim.
+
+   ## Visual vocabulary
+   - Drawn: every object on screen, and where it sits (see Layout budget).
+   - Motion: how each object moves or changes, and what drives it.
+   - Colour: what each colour means.
+
+   ## Distinct from
+   The nearest existing topic or topics, each one's vocabulary in one line, and
+   what differs in what is drawn and in how it moves.
+
+   ## Key teaching moment
+   The one beat the video exists for: what is on screen, what the sentence says,
+   and why this input makes it visible.
+
+   ## Beat outline
+   Phases in order, with a beat count for each, 25-35 in total.
+   ```
+
+The vocabulary must differ from the nearest existing topic in **both** what is
+drawn and how it moves. A new colour on the same diagram does not count.
+
+Step 0 below is then already done, because the trace is in the brief. Go on to
+Step 1, and re-run the trace only if you change the input.
 
 ## Step 0 - verify the trace before writing a single sentence
 
@@ -203,6 +285,11 @@ Because the dry run constructs every mobject, it catches `MathTex` syntax
 errors, bad kwargs and missing attributes before you burn a render. It cannot
 catch layout collisions -- only frames can.
 
+`check_caption_band` - the third check, also a dry run. The caption band is
+reserved, but this check only catches duplicated text at close range, and a
+different mobject overlapping the caption passes it. Keep the band clear by
+construction.
+
 `caption_log` and `video_time` are the public surface these checks read. Do not
 rename them.
 
@@ -266,6 +353,8 @@ them onto different rows rather than hoping they never coincide.
 
 ## Checklist
 
+- [ ] Brief in `scripts/<topic>.brief.md`: a supplied brief verbatim, or a Step B brief with every section
+- [ ] Step B only: vocabulary differs from the nearest listed topic in what is drawn and how it moves; rejected inputs recorded
 - [ ] Algorithm traced on the exact input; step count supports the visual brief
 - [ ] Any spec deviation stated explicitly, with the reason
 - [ ] 25-35 sentences, 9-13 words each, ASCII, no apostrophes

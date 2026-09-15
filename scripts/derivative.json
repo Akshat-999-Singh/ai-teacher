@@ -1,0 +1,189 @@
+[
+  {
+    "id": 1,
+    "text": "Here is the curve f of x equals x squared.",
+    "start": 0.0,
+    "end": 3.648,
+    "beat": "intro_curve",
+    "caption": "Here is the curve f(x) = x squared"
+  },
+  {
+    "id": 2,
+    "text": "A derivative measures how steep a curve is at a single point.",
+    "start": 3.998,
+    "end": 8.15,
+    "beat": "intro_steep"
+  },
+  {
+    "id": 3,
+    "text": "Take the point where x equals one, which sits at height one.",
+    "start": 8.5,
+    "end": 12.652,
+    "beat": "intro_point"
+  },
+  {
+    "id": 4,
+    "text": "Slope means rise over run, and that needs two points, not one.",
+    "start": 13.002,
+    "end": 17.97,
+    "beat": "intro_rise_run"
+  },
+  {
+    "id": 5,
+    "text": "So add a second point, a little further along the curve.",
+    "start": 18.32,
+    "end": 22.424,
+    "beat": "setup_q"
+  },
+  {
+    "id": 6,
+    "text": "The horizontal gap between the two points is called h.",
+    "start": 22.774,
+    "end": 26.758,
+    "beat": "setup_h"
+  },
+  {
+    "id": 7,
+    "text": "The line through both points is called a secant line.",
+    "start": 27.108,
+    "end": 30.708,
+    "beat": "setup_secant"
+  },
+  {
+    "id": 8,
+    "text": "Its slope is the change in f, divided by the step h.",
+    "start": 31.058,
+    "end": 35.45,
+    "beat": "setup_formula"
+  },
+  {
+    "id": 9,
+    "text": "Right now h is one, so the second point sits at two.",
+    "start": 35.8,
+    "end": 40.0,
+    "beat": "h1_value"
+  },
+  {
+    "id": 10,
+    "text": "The rise is three over a run of one, so the slope is three.",
+    "start": 40.35,
+    "end": 44.766,
+    "beat": "h1_slope"
+  },
+  {
+    "id": 11,
+    "text": "Now shrink h to one half, pulling the second point closer.",
+    "start": 45.116,
+    "end": 49.676,
+    "beat": "h2_shrink"
+  },
+  {
+    "id": 12,
+    "text": "The rise is one point two five, so the slope is two point five.",
+    "start": 50.026,
+    "end": 54.874,
+    "beat": "h2_slope",
+    "caption": "The rise is 1.25, so the slope is 2.5"
+  },
+  {
+    "id": 13,
+    "text": "Shrink h again, to one quarter, and the secant tilts further.",
+    "start": 55.224,
+    "end": 59.904,
+    "beat": "h3_shrink"
+  },
+  {
+    "id": 14,
+    "text": "Now the slope is two point two five, still falling.",
+    "start": 60.254,
+    "end": 64.286,
+    "beat": "h3_slope",
+    "caption": "Now the slope is 2.25, still falling"
+  },
+  {
+    "id": 15,
+    "text": "Shrink h to one tenth, and the two points almost touch.",
+    "start": 64.636,
+    "end": 68.812,
+    "beat": "h4_shrink"
+  },
+  {
+    "id": 16,
+    "text": "The slope is now two point one, only just above two.",
+    "start": 69.162,
+    "end": 73.362,
+    "beat": "h4_slope",
+    "caption": "The slope is now 2.1, only just above 2"
+  },
+  {
+    "id": 17,
+    "text": "In every row, the slope is exactly two plus h.",
+    "start": 73.712,
+    "end": 77.744,
+    "beat": "an_pattern"
+  },
+  {
+    "id": 18,
+    "text": "Squaring one plus h gives one, plus two h, plus h squared.",
+    "start": 78.094,
+    "end": 83.35,
+    "beat": "an_expand"
+  },
+  {
+    "id": 19,
+    "text": "The ones cancel, and dividing by h leaves two plus h.",
+    "start": 83.7,
+    "end": 88.188,
+    "beat": "an_cancel"
+  },
+  {
+    "id": 20,
+    "text": "As h shrinks toward zero, two plus h closes in on two.",
+    "start": 88.538,
+    "end": 93.41,
+    "beat": "lim_shrink"
+  },
+  {
+    "id": 21,
+    "text": "The secant turns into the tangent, which just touches the curve here.",
+    "start": 93.76,
+    "end": 98.392,
+    "beat": "lim_tangent"
+  },
+  {
+    "id": 22,
+    "text": "That limiting slope, two, is the derivative of f at one.",
+    "start": 98.742,
+    "end": 103.182,
+    "beat": "lim_value"
+  },
+  {
+    "id": 23,
+    "text": "At this point, the curve climbs two units for every one across.",
+    "start": 103.532,
+    "end": 108.332,
+    "beat": "an_meaning"
+  },
+  {
+    "id": 24,
+    "text": "In general, the derivative is the limit of the secant slope.",
+    "start": 108.682,
+    "end": 113.002,
+    "beat": "an_def"
+  },
+  {
+    "id": 25,
+    "text": "Doing this at every x gives the derivative two x.",
+    "start": 113.352,
+    "end": 117.264,
+    "beat": "end_general",
+    "caption": "Doing this at every x gives the derivative 2x"
+  },
+  {
+    "id": 26,
+    "text": "A derivative is a secant slope, as the gap shrinks to zero.",
+    "start": 117.614,
+    "end": 122.102,
+    "beat": "end_line"
+  }
+]

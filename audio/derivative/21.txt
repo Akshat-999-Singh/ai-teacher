@@ -1,0 +1,2 @@
+en-US-AriaNeural
+The secant turns into the tangent, which just touches the curve here.

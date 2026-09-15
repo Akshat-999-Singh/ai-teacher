@@ -1,0 +1,2 @@
+en-US-AriaNeural
+A derivative is a secant slope, as the gap shrinks to zero.

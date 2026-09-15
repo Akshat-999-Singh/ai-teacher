@@ -1,0 +1,2 @@
+en-US-AriaNeural
+A derivative measures how steep a curve is at a single point.

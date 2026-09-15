@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Here is the curve f of x equals x squared.

@@ -54,5 +54,12 @@
     "video": "rendered/bfs_dfs.mp4",
     "script": "scripts/bfs_dfs.json",
     "scene": "scenes/bfs_dfs.py"
+  },
+  "derivative": {
+    "title": "Derivative",
+    "category": "math",
+    "video": "rendered/derivative.mp4",
+    "script": "scripts/derivative.json",
+    "scene": "scenes/derivative.py"
   }
 }

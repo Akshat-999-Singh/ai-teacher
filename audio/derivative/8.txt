@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Its slope is the change in f, divided by the step h.
