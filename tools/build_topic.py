@@ -1,7 +1,7 @@
 """Synthesize narration for a topic, measure it, and time-stamp the script.
 
 Usage:
-    python tools/build_topic.py <topic> [--voice VOICE] [--gap SECONDS] [--force]
+    python tools/build_topic.py <topic> [--voice VOICE] [--gap SECONDS] [--force] [--strict]
 
 Reads   scripts/<topic>.json   -> [{id, text, beat}, ...]
 Writes  audio/<topic>/<id>.mp3 -> one clip per segment
@@ -27,6 +27,7 @@ import asyncio
 import importlib.util
 import json
 import sys
+import traceback
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -236,8 +237,8 @@ def _load_scene_class(topic: str, purpose: str):
     try:
         spec.loader.exec_module(module)
         scene_class = getattr(module, class_name)
-    except Exception as exc:  # noqa: BLE001 - report, never fail the audio build
-        print(f"\n{purpose}: could not load {class_name} from {scene_path.name} ({exc})")
+    except Exception:  # noqa: BLE001 - report, never fail the audio build
+        print(f"\n{purpose}: could not load {class_name} from {scene_path.name}:\n{traceback.format_exc()}")
         return None
 
     if not hasattr(scene_class, "setup_timing"):
@@ -276,8 +277,8 @@ def check_caption_sync(topic: str, timed: list[dict]) -> bool | None:
     probe = object.__new__(probe_class)  # skip Scene.__init__; there is no renderer
     try:
         probe.construct()
-    except Exception as exc:  # noqa: BLE001
-        print(f"\nCaption sync: dry run of {class_name} failed ({exc})")
+    except Exception:  # noqa: BLE001
+        print(f"\nCaption sync: dry run of {class_name} failed:\n{traceback.format_exc()}")
         return None
 
     first_caption: dict[str, float] = {}
@@ -457,8 +458,8 @@ def check_caption_band(topic: str) -> bool | None:
     probe = object.__new__(probe_class)  # skip Scene.__init__; there is no renderer
     try:
         probe.construct()
-    except Exception as exc:  # noqa: BLE001
-        print(f"\nCaption band: dry run of {class_name} failed ({exc})")
+    except Exception:  # noqa: BLE001
+        print(f"\nCaption band: dry run of {class_name} failed:\n{traceback.format_exc()}")
         return None
 
     print(f"\nCaption band (min {CAPTION_CLEARANCE} unit clearance from the caption):")
@@ -479,6 +480,8 @@ def main() -> None:
     parser.add_argument("--gap", type=float, default=DEFAULT_GAP,
                         help=f"silence between segments, seconds (default {DEFAULT_GAP})")
     parser.add_argument("--force", action="store_true", help="re-synthesize cached clips")
+    parser.add_argument("--strict", action="store_true",
+                        help="fail when a check cannot run (no scene, or the scene crashes in the dry run)")
     args = parser.parse_args()
 
     ffmpeg = _resolve_ffmpeg()
@@ -512,9 +515,10 @@ def main() -> None:
 
     # Audio is fully written by now, so a failing check never costs you the build.
     lengths_ok = report_beat_lengths(timed)
-    sync_ok = check_caption_sync(args.topic, timed)
-    band_ok = check_caption_band(args.topic)
-    if sync_ok is False or band_ok is False or not lengths_ok:
+    checks = [check_caption_sync(args.topic, timed), check_caption_band(args.topic)]
+    # A check returns None when it could not run. Without --strict that is a skip, which
+    # is how a scene that crashes in its dry run would otherwise exit 0.
+    if not lengths_ok or False in checks or (args.strict and None in checks):
         sys.exit(1)
 
 
