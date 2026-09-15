@@ -32,3 +32,10 @@ scenes/ scripts/ audio/ rendered/ data/ frontend/
   guarantees caption-first. Don't write captions any other way.
 - Run check_caption_sync() before rendering. It dry-runs the scene with
   play/wait stubbed, so it costs no render time.
+
+  - The caption band is reserved. check_caption_band enforces this, but it
+  only catches duplicated text at close range — a different mobject
+  overlapping the caption will pass. Keep the band clear by construction.
+- Checks verify timing and text, not layout. A scene can pass every check
+  and still look wrong. Always view a frame from the middle and end of a
+  new scene before calling it done.
