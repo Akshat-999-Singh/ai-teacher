@@ -1,0 +1,2 @@
+en-US-AriaNeural
+But on nearly sorted input, each card stops after one comparison.

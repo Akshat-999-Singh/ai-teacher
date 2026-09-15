@@ -1,11 +1,17 @@
 """Render a topic's Manim scene, mux its narration in, and publish the result.
 
 Usage:
-    python tools/render_topic.py <topic> [--scene CLASS] [--quality h] [--fps 30]
+    python tools/render_topic.py <topic> [--title TITLE --category CATEGORY] [--scene CLASS] [--quality h] [--fps 30]
 
-Reads   scenes/<topic>.py     -> Manim scene (class defaults to the CamelCase topic)
-        audio/<topic>.mp3     -> narration master from build_topic.py
-Writes  rendered/<topic>.mp4  -> silent render + narration, muxed
+Reads   scenes/<topic>.py       -> Manim scene (class defaults to the CamelCase topic)
+        audio/<topic>.mp3       -> narration master from build_topic.py
+Writes  rendered/<topic>.mp4    -> silent render + narration, muxed
+        rendered/manifest.json  -> the topic's entry, which lists it in the app sidebar
+                                   and makes it retrievable by /classify
+
+--title and --category are required on a topic's first render and remembered after it
+(tools/topic_manifest.py). Listing is the last step, so a topic appears in the app only
+once its video is muxed.
 
 Run build_topic.py first: the scene reads its run_times out of the timed
 scripts/<topic>.json, so rendering before timing produces a video that is not
@@ -21,6 +27,8 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+import topic_manifest
 
 ROOT = Path(__file__).resolve().parent.parent
 SCENES = ROOT / "scenes"
@@ -110,11 +118,20 @@ def mux(video: Path, audio: Path, out_path: Path, ffmpeg: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Render a topic and mux its narration in.")
     parser.add_argument("topic", help="topic name, e.g. bubble_sort")
+    parser.add_argument("--title", help="display name in the app sidebar; required on the first render")
+    parser.add_argument("--category", choices=topic_manifest.CATEGORIES,
+                        help="classifier category that retrieves the topic; required on the first render")
     parser.add_argument("--scene", default=None, help="scene class (default: CamelCase topic)")
     parser.add_argument("--quality", default="h", choices=list("lmhpk"),
                         help="manim quality flag (default h = 1080p)")
     parser.add_argument("--fps", type=int, default=30)
     args = parser.parse_args()
+
+    # Before the render, so a missing title or category costs seconds rather than a render.
+    try:
+        title, category = topic_manifest.listing(args.topic, args.title, args.category)
+    except ValueError as exc:
+        sys.exit(str(exc))
 
     scene = args.scene or default_scene_name(args.topic)
     audio = AUDIO / f"{args.topic}.mp3"
@@ -133,6 +150,12 @@ def main() -> None:
     print(f"  narration    : {a:8.3f}s")
     print(f"  drift        : {v - a:+8.3f}s")
     print(f"\n  {out_path.relative_to(ROOT)}  {o:.3f}s")
+
+    try:
+        topic_manifest.register(args.topic, title, category)
+    except ValueError as exc:
+        sys.exit(str(exc))
+    print(f"  listed in {topic_manifest.MANIFEST.relative_to(ROOT)} as {title!r} ({category})")
 
 
 if __name__ == "__main__":

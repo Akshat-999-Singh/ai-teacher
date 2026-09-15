@@ -28,21 +28,25 @@ What would change to enable it:
      finishes while the student is still there.
   4. A container around steps 3 and 4 below: no network, read-only project mount, CPU,
      memory and time limits.
-  5. A review step, and a UI that lists manifest topics, before a generated video is
-     shown to anyone other than the person who asked for it.
+  5. A review step before a generated video is shown to anyone other than the person
+     who asked for it. The app sidebar lists every published topic in
+     rendered/manifest.json, reviewed=false included, so that is where the gate goes.
 
 One attempt (at most MAX_ATTEMPTS):
 
-  1. Claude submits scripts/<topic>.json and scenes/<topic>.py through the write_topic tool.
+  1. Claude submits scripts/<topic>.json and scenes/<topic>.py through the write_topic tool,
+     with the topic's display title and classifier category.
   2. Cheap local checks: ASCII narration, class name, TOPIC, Python syntax.
   3. tools/build_topic.py --strict: TTS, measured durations, report_beat_lengths,
      check_caption_sync, check_caption_band.        (subprocess, BUILD_TIMEOUT)
-  4. tools/render_topic.py: Manim render, narration mux. (subprocess, RENDER_TIMEOUT)
+  4. tools/render_topic.py: Manim render, narration mux, and the manifest entry that
+     lists the topic in the app under its title and category. (subprocess, RENDER_TIMEOUT)
   5. A failure in 2-4 goes back to Claude as the tool result, with the log tail,
      and the next attempt starts again at 1.
 
-Success adds an entry to rendered/manifest.json. Failure removes every file the run
-created; a topic that already exists is refused up front, so nothing is overwritten.
+Success adds how the topic was made (model, attempts, brief, reviewed=false) to its entry
+in rendered/manifest.json. Failure removes every file the run created, and the entry if
+there is one; a topic that already exists is refused up front, so nothing is overwritten.
 
 CLI: .venv\\Scripts\\python.exe tools\\generate_animation.py <topic> "<visual brief>"
 """
@@ -62,6 +66,7 @@ from pathlib import Path
 import anthropic
 
 import config
+import topic_manifest
 from render_topic import default_scene_name
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -71,7 +76,7 @@ SCENES = ROOT / "scenes"
 AUDIO = ROOT / "audio"
 RENDERED = ROOT / "rendered"
 MEDIA_VIDEOS = ROOT / "media" / "videos"
-MANIFEST = RENDERED / "manifest.json"
+MANIFEST = topic_manifest.MANIFEST
 
 # The generation contract is read from the files that define it, not restated here.
 SKILL = ROOT / ".claude" / "skills" / "new-topic" / "SKILL.md"
@@ -100,7 +105,12 @@ WRITE_TOPIC_TOOL = {
     "input_schema": {
         "type": "object",
         "properties": {
-            "title": {"type": "string", "description": "Display title, e.g. 'Insertion sort'."},
+            "title": {"type": "string", "description": "Display name in the app sidebar, e.g. 'Insertion sort'."},
+            "category": {
+                "type": "string",
+                "enum": list(topic_manifest.CATEGORIES),
+                "description": "The classifier category a student's question about this topic falls under.",
+            },
             "segments": {
                 "type": "array",
                 "description": "Contents of scripts/<topic>.json: one narration sentence per beat, in order.",
@@ -117,7 +127,7 @@ WRITE_TOPIC_TOOL = {
             },
             "scene_py": {"type": "string", "description": "Full source of scenes/<topic>.py."},
         },
-        "required": ["title", "segments", "scene_py"],
+        "required": ["title", "category", "segments", "scene_py"],
         "additionalProperties": False,
     },
 }
@@ -180,7 +190,7 @@ def generate_animation(topic_name: str, visual_brief: str) -> tuple[Path, int]:
             else:
                 failure = run_pipeline(topic_name, submission)
                 if failure is None:
-                    write_manifest_entry(topic_name, submission["title"], visual_brief, attempt)
+                    write_manifest_entry(topic_name, visual_brief, attempt)
                     video = RENDERED / f"{topic_name}.mp4"
                     log.info("[%s] attempt %d/%d: passed, %s", topic_name, attempt, MAX_ATTEMPTS,
                              video.relative_to(ROOT))
@@ -211,7 +221,7 @@ def validate_new_topic(topic: str) -> None:
     if not TOPIC_NAME.fullmatch(topic):
         raise TopicNameError(f"topic name must be lowercase snake_case, 3-40 characters; got {topic!r}")
     taken = [p.relative_to(ROOT).as_posix() for p in topic_paths(topic) if p.exists()]
-    if topic in read_manifest():
+    if topic in topic_manifest.read():
         taken.append(MANIFEST.relative_to(ROOT).as_posix())
     if taken:
         raise TopicNameError(
@@ -255,6 +265,7 @@ def build_system_prompt() -> str:
 How your submission is used:
 - `segments` becomes scripts/<topic>.json. Every sentence is synthesised and measured, then report_beat_lengths, check_caption_sync and check_caption_band run against your scene, as the skill describes.
 - `scene_py` becomes scenes/<topic>.py, rendered at 1080p30 and muxed with the narration.
+- `title` and `category` list the finished video in the app: the title in its topic list, the category for questions routed to it.
 - You cannot run code or look at frames. Trace the algorithm on the exact input before writing narration (skill step 0) and keep to the layout budget: nobody will catch a collision before a student sees it. The skill's steps that run commands or pull frames are handled by the pipeline, or not at all.
 
 Submit by calling write_topic with both files in full. If a tool result reports a failure, fix its cause and call write_topic again with both files in full."""
@@ -336,7 +347,8 @@ def run_pipeline(topic: str, submission: dict) -> str | None:
 
     return run_step(
         "render_topic.py: Manim render and narration mux",
-        [sys.executable, str(TOOLS / "render_topic.py"), topic, "--quality", RENDER_QUALITY],
+        [sys.executable, str(TOOLS / "render_topic.py"), topic, "--quality", RENDER_QUALITY,
+         "--title", submission["title"], "--category", submission["category"]],
         RENDER_TIMEOUT,
     )
 
@@ -344,6 +356,10 @@ def run_pipeline(topic: str, submission: dict) -> str | None:
 def validate_submission(topic: str, submission: dict) -> list[str]:
     """Problems cheap enough to catch before spending a TTS run."""
     problems = []
+    if not submission["title"].strip():
+        problems.append("title is empty; it is the topic's name in the app sidebar")
+    if submission["category"] not in topic_manifest.CATEGORIES:
+        problems.append(f"category must be one of {', '.join(topic_manifest.CATEGORIES)}")
     if not submission["segments"]:
         problems.append("segments is empty")
     for segment in submission["segments"]:
@@ -406,37 +422,31 @@ def topic_paths(topic: str) -> list[Path]:
 
 
 def remove_topic_files(topic: str) -> None:
-    """Undo a failed run. Safe only because validate_new_topic refused existing topics."""
+    """Undo a failed run: its files, and its manifest entry if render_topic.py got that far.
+
+    Safe only because validate_new_topic refused existing topics.
+    """
     for path in topic_paths(topic):
         if path.is_dir():
             shutil.rmtree(path)
         elif path.exists():
             path.unlink()
+    topic_manifest.unregister(topic)
     log.info("[%s] removed the files this run created", topic)
 
 
-def read_manifest() -> dict:
-    return json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
-
-
-def write_manifest_entry(topic: str, title: str, visual_brief: str, attempts: int) -> None:
-    manifest = read_manifest()
-    manifest[topic] = {
-        "title": title,
-        "video": f"rendered/{topic}.mp4",
-        "script": f"scripts/{topic}.json",
-        "scene": f"scenes/{topic}.py",
-        "source": "runtime_generation",
-        "model": MODEL,
-        "attempts": attempts,
-        "visual_brief": visual_brief,
-        "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+def write_manifest_entry(topic: str, visual_brief: str, attempts: int) -> None:
+    """Record how the topic was made, on the entry render_topic.py wrote (title, category, paths)."""
+    topic_manifest.update(
+        topic,
+        source="runtime_generation",
+        model=MODEL,
+        attempts=attempts,
+        visual_brief=visual_brief,
+        created_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
         # Development-time topics are checked frame by frame before shipping; this one was not.
-        "reviewed": False,
-    }
-    staging = MANIFEST.with_name(MANIFEST.name + ".tmp")
-    staging.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    staging.replace(MANIFEST)
+        reviewed=False,
+    )
 
 
 def tail(text: str, limit: int) -> str:

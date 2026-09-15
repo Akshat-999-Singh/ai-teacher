@@ -18,6 +18,7 @@ scenes/<topic>.py       one TimedScene subclass, class name = CamelCase(topic)
 audio/<topic>/<id>.mp3  one clip per sentence (+ <id>.txt cache stamp)
 audio/<topic>.mp3       concatenated narration master
 rendered/<topic>.mp4    1920x1080@30, h264+aac
+rendered/manifest.json  {<topic>: {title, category, video, script, scene}} - render_topic adds the entry
 ```
 
 The class name is derived, not configured: `binary_search` -> `BinarySearch`.
@@ -29,8 +30,18 @@ file name, the `TOPIC` attribute and the class name must agree.
 ```bash
 cd /d/ai-teacher
 ./.venv/Scripts/python.exe tools/build_topic.py  <topic>                      # TTS + timings + BOTH checks
-./.venv/Scripts/python.exe tools/render_topic.py <topic> --quality h --fps 30 # render + mux + publish
+./.venv/Scripts/python.exe tools/render_topic.py <topic> --title "<Title>" --category <category> --quality h --fps 30  # render + mux + list
 ```
+
+`--title` is the topic's name in the app sidebar. `--category` is the classifier
+label a question about it gets: `dynamic_programming`, `math`, `physics`,
+`searching`, `sorting` or `stack`. Both are required on a topic's first render
+(it exits before rendering without them) and remembered after. Listing the topic
+in `rendered/manifest.json` is render_topic's last step, and the app and
+`/classify` read that file on every request, so the topic appears on refresh with
+no code change and no restart. To list a topic that was rendered before it had an
+entry, without rendering it again:
+`./.venv/Scripts/python.exe tools/topic_manifest.py <topic> --title "<Title>" --category <category>`
 
 `build_topic.py` exits 1 if either check fails, but only *after* writing the
 audio, so a failing check never costs you the TTS run. Never render before it
@@ -197,8 +208,8 @@ rename them.
 
 ## Step 4 - render, mux, verify frames
 
-`render_topic.py` renders, muxes with `-shortest`, and publishes to
-`rendered/<topic>.mp4`. Then **pull frames and look at them** -- every visual
+`render_topic.py` renders, muxes with `-shortest`, publishes to
+`rendered/<topic>.mp4` and lists it in `rendered/manifest.json`. Then **pull frames and look at them** -- every visual
 defect so far was invisible to the checks:
 
 ```bash
@@ -263,6 +274,6 @@ them onto different rows rather than hoping they never coincide.
 - [ ] SCRIPT table matches the traced steps one-to-one
 - [ ] Exactly one `c.play` per action method
 - [ ] `build_topic.py` exits 0: every beat in target, captions in sync, +0.000
-- [ ] Rendered and muxed
+- [ ] Rendered, muxed and listed with `--title` and `--category`; it shows in the app sidebar on refresh
 - [ ] Frames sampled per phase and actually looked at
 - [ ] Report segment count, total duration, and both check results

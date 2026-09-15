@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Pick up the last card, six, leaving a hole at index four.

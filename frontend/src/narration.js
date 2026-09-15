@@ -48,6 +48,7 @@ export function useScript(topic) {
   const [loaded, setLoaded] = useState({ topic: null, segments: NO_SEGMENTS })
 
   useEffect(() => {
+    if (!topic) return // the topic list has not arrived, or is empty
     const controller = new AbortController()
     fetch(scriptUrl(topic), { signal: controller.signal })
       .then((res) => {

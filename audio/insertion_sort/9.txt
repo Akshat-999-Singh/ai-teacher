@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Pick up the next card, nine, from index two.

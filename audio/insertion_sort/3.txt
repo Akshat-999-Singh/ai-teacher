@@ -1,0 +1,2 @@
+en-US-AriaNeural
+On its own, the first card is already a sorted hand.

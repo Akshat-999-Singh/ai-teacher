@@ -36,19 +36,10 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 import config
 import generate_animation as generation
+import topic_manifest
 
 ROOT = Path(__file__).resolve().parent.parent
 MODEL_PATH = ROOT / "models" / "classifier.pkl"
-RENDERED_DIR = ROOT / "rendered"
-
-TOPIC_CATEGORY = {
-    "bubble_sort": "sorting",
-    "binary_search": "searching",
-    "kadane": "dynamic_programming",
-    "valid_parentheses": "stack",
-    "euclidean_gcd": "math",
-    "projectile_motion": "physics",
-}
 
 TOP_K = 2
 
@@ -91,12 +82,9 @@ class ClassifyResponse(BaseModel):
     candidates: list[Candidate]
 
 
-def rendered_topic(category):
-    # Checked per request, so a newly rendered video is served without a restart.
-    for topic, cat in TOPIC_CATEGORY.items():
-        if cat == category and (RENDERED_DIR / f"{topic}.mp4").exists():
-            return topic
-    return None
+def rendered_topic(category, listed):
+    # The first published topic in this category, in manifest (sidebar) order.
+    return next((topic for topic, entry in listed.items() if entry["category"] == category), None)
 
 
 @asynccontextmanager
@@ -116,10 +104,12 @@ def classify(request: ClassifyRequest):
     pipeline = _state["pipeline"]
     probs = pipeline.predict_proba([request.text])[0]
     classes = pipeline.classes_
+    # Read per request, so a newly rendered topic is retrievable without a restart.
+    listed = topic_manifest.published()
 
     candidates = [
         Candidate(category=str(classes[i]), score=round(float(probs[i]), 4),
-                  topic=rendered_topic(str(classes[i])))
+                  topic=rendered_topic(str(classes[i]), listed))
         for i in np.argsort(probs)[::-1][:TOP_K]
     ]
     best = candidates[0]

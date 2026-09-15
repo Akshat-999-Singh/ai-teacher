@@ -16,7 +16,7 @@ that routes a student's free-text question to one of them.
   confidence threshold and a keyword guard stop it presenting weak or
   impossible matches as answers.
 - **App.** A Vite + React page where the `<video>` element is the only
-  clock, the six topics are always clickable, and a slot for a talking avatar
+  clock, every rendered topic is always clickable, and a slot for a talking avatar
   already receives the active narration segment.
 
 The 54% is the most important number in this report. §6 explains why it is
@@ -267,8 +267,10 @@ moved out of the frame into the sidebar.
 
 - **Stack.** Vite + React with plain CSS. `rendered/` and `scripts/` are served
   in place, with byte-range support so the video can seek.
-- **Layout.** The video fills the available height, with the six topics always
-  visible in a sidebar. The avatar slot sits at the top of the sidebar and
+- **Layout.** The video fills the available height, with the topics always
+  visible in a sidebar. The list comes from `rendered/manifest.json`, which
+  `render_topic.py` writes as its last step; the dev server and `/classify` read
+  it per request, so a new render appears on refresh without a code change. The avatar slot sits at the top of the sidebar and
   receives `currentSegment` and `speaking`.
 - **Classification readout.** Above the video: the query, the predicted
   category and score, the matched topic, and a clickable runner-up. It never

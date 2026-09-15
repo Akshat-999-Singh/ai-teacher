@@ -5,8 +5,10 @@ import { classify } from './classify.js'
 import { PlayIcon } from './icons.jsx'
 import { useNarration, useScript, useVideoClock } from './narration.js'
 import { Readout } from './Readout.jsx'
-import { TOPICS, topicById, videoUrl } from './topics.js'
+import { subjectOf, useTopics, videoUrl } from './topics.js'
 import { Transport } from './Transport.jsx'
+
+const BLANK = ' ' // keeps the heading's height while the topic list loads
 
 function play(video) {
   // A newer src or a pause interrupting play() rejects with AbortError; that's expected.
@@ -19,24 +21,44 @@ export default function App() {
   const videoRef = useRef(null)
   const playOnLoad = useRef(false)
   const askSeq = useRef(0)
-  const [topicId, setTopicId] = useState(TOPICS[0].id)
+  const topicsRef = useRef(null)
+  const { topics, failed } = useTopics()
+  const [pickedId, setPickedId] = useState(null)
   const [classification, setClassification] = useState(null)
+
+  // The picked topic while it is listed, otherwise the first one.
+  const topic = topics?.find((t) => t.id === pickedId) ?? topics?.[0] ?? null
+  const topicId = topic?.id ?? null
+  const isListed = (id) => topics?.some((t) => t.id === id) ?? false
+  const titleOf = (id) => topics?.find((t) => t.id === id)?.title ?? id
 
   const clock = useVideoClock(videoRef)
   const segments = useScript(topicId)
   const { currentSegment, index, speaking } = useNarration(segments, clock.currentTime)
-  const topic = topicById(topicId)
 
-  // Only at the start and the end: a mid-video pause leaves the frame unobstructed.
-  const showPlayOverlay = clock.paused && (clock.ended || clock.currentTime < 0.05)
+  // Only at the start and the end: a mid-video pause leaves the frame unobstructed. Shown
+  // while the list loads too, so it is there from the first paint instead of fading in.
+  const showPlayOverlay = topics?.length !== 0 && clock.paused && (clock.ended || clock.currentTime < 0.05)
 
   useEffect(() => {
-    if (playOnLoad.current) play(videoRef.current)
+    if (playOnLoad.current && topicId) play(videoRef.current)
   }, [topicId])
+
+  // Keep the playing topic visible when the list scrolls (a question can pick one that is
+  // scrolled out of view). Moves the list only: scrollIntoView would also scroll the page.
+  useEffect(() => {
+    const list = topicsRef.current
+    const item = list?.querySelector('[aria-current="true"]')
+    if (!item) return
+    const box = list.getBoundingClientRect()
+    const row = item.getBoundingClientRect()
+    if (row.top < box.top) list.scrollTop -= box.top - row.top
+    else if (row.bottom > box.bottom) list.scrollTop += row.bottom - box.bottom
+  }, [topicId, topics])
 
   function showTopic(id, autoplay = true) {
     playOnLoad.current = autoplay
-    if (id !== topicId) setTopicId(id)
+    if (id !== topicId) setPickedId(id)
     else if (autoplay) play(videoRef.current)
   }
 
@@ -54,7 +76,7 @@ export default function App() {
     if (seq !== askSeq.current) return // superseded by a newer question or a manual pick
     setClassification({ seq, query, ...result })
     // A low-confidence match is only the closest topic: show it, but don't start narrating.
-    if (result.topic) showTopic(result.topic, !result.low_confidence)
+    if (result.topic && isListed(result.topic)) showTopic(result.topic, !result.low_confidence)
   }
 
   function pickTopic(id) {
@@ -65,9 +87,12 @@ export default function App() {
 
   function togglePlay() {
     const video = videoRef.current
+    if (!topic) return
     if (video.paused) play(video)
     else video.pause()
   }
+
+  const emptyTitle = topics === null ? BLANK : failed ? 'Topic list unavailable' : 'No topics rendered yet'
 
   return (
     <div className="page">
@@ -79,17 +104,17 @@ export default function App() {
       <main className="stage">
         <div className="stage-heading">
           <div className="heading-text">
-            <p className="eyebrow">{topic.subject}</p>
-            <h1 className="title">{topic.title}</h1>
+            <p className="eyebrow">{topic ? subjectOf(topic.category) : BLANK}</p>
+            <h1 className="title">{topic ? topic.title : emptyTitle}</h1>
           </div>
-          <Readout result={classification} onPickTopic={pickTopic} />
+          <Readout result={classification} titleOf={titleOf} onPickTopic={pickTopic} />
         </div>
 
         <div className="frame">
           <video
             ref={videoRef}
             className="video"
-            src={videoUrl(topicId)}
+            src={topicId ? videoUrl(topicId) : undefined}
             preload="auto"
             playsInline
             onClick={togglePlay}
@@ -99,7 +124,7 @@ export default function App() {
             className="play-overlay"
             data-visible={showPlayOverlay}
             tabIndex={showPlayOverlay ? 0 : -1}
-            aria-label={`Play ${topic.title}`}
+            aria-label={topic ? `Play ${topic.title}` : 'Play'}
             onClick={togglePlay}
           >
             <PlayIcon />
@@ -116,9 +141,9 @@ export default function App() {
 
         <aside className="sidebar">
           <AvatarSlot segment={currentSegment} speaking={speaking} />
-          <nav className="topics" aria-label="Topics">
+          <nav className="topics" aria-label="Topics" ref={topicsRef}>
             <ul>
-              {TOPICS.map((t) => (
+              {topics?.map((t) => (
                 <li key={t.id}>
                   <button
                     type="button"
@@ -126,7 +151,7 @@ export default function App() {
                     aria-current={t.id === topicId ? 'true' : undefined}
                     onClick={() => pickTopic(t.id)}
                   >
-                    <span className="topic-subject">{t.subject}</span>
+                    <span className="topic-subject">{subjectOf(t.category)}</span>
                     <span className="topic-title">{t.title}</span>
                   </button>
                 </li>

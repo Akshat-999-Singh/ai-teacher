@@ -1,0 +1,51 @@
+{
+  "bubble_sort": {
+    "title": "Bubble sort",
+    "category": "sorting",
+    "video": "rendered/bubble_sort.mp4",
+    "script": "scripts/bubble_sort.json",
+    "scene": "scenes/bubble_sort.py"
+  },
+  "binary_search": {
+    "title": "Binary search",
+    "category": "searching",
+    "video": "rendered/binary_search.mp4",
+    "script": "scripts/binary_search.json",
+    "scene": "scenes/binary_search.py"
+  },
+  "kadane": {
+    "title": "Kadane’s algorithm",
+    "category": "dynamic_programming",
+    "video": "rendered/kadane.mp4",
+    "script": "scripts/kadane.json",
+    "scene": "scenes/kadane.py"
+  },
+  "valid_parentheses": {
+    "title": "Valid parentheses",
+    "category": "stack",
+    "video": "rendered/valid_parentheses.mp4",
+    "script": "scripts/valid_parentheses.json",
+    "scene": "scenes/valid_parentheses.py"
+  },
+  "euclidean_gcd": {
+    "title": "Euclidean GCD",
+    "category": "math",
+    "video": "rendered/euclidean_gcd.mp4",
+    "script": "scripts/euclidean_gcd.json",
+    "scene": "scenes/euclidean_gcd.py"
+  },
+  "projectile_motion": {
+    "title": "Projectile motion",
+    "category": "physics",
+    "video": "rendered/projectile_motion.mp4",
+    "script": "scripts/projectile_motion.json",
+    "scene": "scenes/projectile_motion.py"
+  },
+  "insertion_sort": {
+    "title": "Insertion sort",
+    "category": "sorting",
+    "video": "rendered/insertion_sort.mp4",
+    "script": "scripts/insertion_sort.json",
+    "scene": "scenes/insertion_sort.py"
+  }
+}

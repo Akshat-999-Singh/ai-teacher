@@ -1,11 +1,8 @@
-import { topicById } from './topics.js'
-
 const percent = (score) => `${Math.round(score * 100)}%`
-const titleOf = (id) => (id ? topicById(id).title : 'none rendered yet')
 
 // What the classifier made of the last question. At most three single lines, so the
 // video below never moves when a result arrives.
-export function Readout({ result, onPickTopic }) {
+export function Readout({ result, titleOf, onPickTopic }) {
   return (
     <div className="readout" aria-live="polite">
       {result && (
@@ -16,7 +13,7 @@ export function Readout({ result, onPickTopic }) {
               <p className="readout-main">The classifier isn’t reachable. Choose a topic from the list.</p>
             </>
           ) : (
-            <Classified result={result} onPickTopic={onPickTopic} />
+            <Classified result={result} titleOf={titleOf} onPickTopic={onPickTopic} />
           )}
         </div>
       )}
@@ -24,8 +21,9 @@ export function Readout({ result, onPickTopic }) {
   )
 }
 
-function Classified({ result, onPickTopic }) {
+function Classified({ result, titleOf, onPickTopic }) {
   const [best, runnerUp] = result.candidates
+  const named = (id) => (id ? titleOf(id) : 'none rendered yet')
   return (
     <>
       {result.low_confidence ? (
@@ -40,7 +38,7 @@ function Classified({ result, onPickTopic }) {
         {result.low_confidence ? (
           <>
             <span className="readout-label">Closest available topic</span>
-            <span className="readout-topic">{titleOf(result.topic)}</span>
+            <span className="readout-topic">{named(result.topic)}</span>
           </>
         ) : (
           <>
@@ -49,7 +47,7 @@ function Classified({ result, onPickTopic }) {
               {best.category} <span className="readout-score">{percent(best.score)}</span>
             </span>
             <span className="readout-label">Topic</span>
-            <span className="readout-topic">{titleOf(result.topic)}</span>
+            <span className="readout-topic">{named(result.topic)}</span>
           </>
         )}
       </p>
@@ -63,7 +61,7 @@ function Classified({ result, onPickTopic }) {
               <>
                 {', '}
                 <button type="button" className="readout-link" onClick={() => onPickTopic(runnerUp.topic)}>
-                  {titleOf(runnerUp.topic)}
+                  {named(runnerUp.topic)}
                 </button>
               </>
             )}

@@ -1,0 +1,2 @@
+en-US-AriaNeural
+A reversed array would force every card all the way left.

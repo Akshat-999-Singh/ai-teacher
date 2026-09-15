@@ -88,15 +88,24 @@ The service starts offline and reads the embedding model from
 `.cache/huggingface/`. On a fresh clone that cache is empty, so run the first
 start with `$env:HF_HUB_OFFLINE=0` to download the model once.
 
-If the classifier service is down, the app says so and the six topics in the
+If the classifier service is down, the app says so and the topics in the
 sidebar still play.
 
 ## Building a topic
 
 ```powershell
 .venv\Scripts\python.exe tools\build_topic.py  <topic>              # TTS, timings, all three checks
-.venv\Scripts\python.exe tools\render_topic.py <topic> --quality h  # render, mux, publish
+.venv\Scripts\python.exe tools\render_topic.py <topic> --title "<Title>" --category <category> --quality h  # render, mux, list
 ```
+
+`render_topic.py` ends by listing the topic in `rendered/manifest.json`, under a
+sidebar title and a classifier category. That file is the only topic list: the
+app's sidebar and `/classify` both read it on every request and skip entries whose
+video or script is missing. A newly rendered topic therefore appears on refresh,
+with no code change and no restart. `--title` and `--category` are required on a
+topic's first render, and remembered after. To list a topic that is already
+rendered without rendering it again, run `tools\topic_manifest.py <topic> --title
+"<Title>" --category <category>`.
 
 `build_topic.py` reads `scripts/<topic>.json` (`[{id, text, beat}]`). It
 synthesises one clip per sentence, writes the measured `start`/`end` back into the
@@ -151,9 +160,9 @@ Stated plainly, with evidence, in [REPORT.md §7](REPORT.md#7-limitations):
 scenes/      TimedScene base (beat_timing.py) + one scene per topic
 scripts/     timed narration JSON, one per topic: [{id, text, start, end, beat}]
 audio/       per-sentence clips (content-keyed cache) + concatenated master
-rendered/    final muxed videos
-tools/       build_topic, render_topic, build_dataset, train_classifier,
-             sentence_embedder, classify_api
+rendered/    final muxed videos + manifest.json (the topic list: title, category)
+tools/       build_topic, render_topic, topic_manifest, build_dataset,
+             train_classifier, sentence_embedder, classify_api
 data/        problems.csv (v2, 6 classes), problems_v1_9class.csv, problems_v2_6class.csv
 models/      classifier.pkl, metrics.json (all runs), confusion_matrix.png
 frontend/    Vite + React app

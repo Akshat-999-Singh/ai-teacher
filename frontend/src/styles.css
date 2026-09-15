@@ -474,13 +474,29 @@ button {
   display: flex;
   flex-direction: column;
   gap: 24px;
+  /* Sized by the video column, not by its own content. The topic list is as long as
+     rendered/manifest.json, so it scrolls inside the sidebar rather than making the
+     page taller than the screen. */
+  contain: size;
 }
 
 .avatar-slot {
+  flex: none;
   width: 100%;
   aspect-ratio: 1;
   border: 1px dashed rgb(var(--ink) / 0.16);
   border-radius: 10px;
+}
+
+.topics {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  /* Room for focus outlines, which the scroll box would otherwise clip. */
+  margin: -4px;
+  padding: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--ink) / 0.22) transparent;
 }
 
 .topics ul {
@@ -560,6 +576,12 @@ button {
     flex-direction: row;
     align-items: flex-start;
     margin-top: 36px;
+    contain: none;
+  }
+
+  .topics {
+    flex: 0 1 auto;
+    overflow: visible;
   }
 
   .avatar-slot {

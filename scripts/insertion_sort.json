@@ -1,0 +1,214 @@
+[
+  {
+    "id": 1,
+    "text": "We start with five, two, nine, one, six.",
+    "start": 0.0,
+    "end": 4.416,
+    "beat": "intro_array",
+    "caption": "We start with 5, 2, 9, 1, 6"
+  },
+  {
+    "id": 2,
+    "text": "Insertion sort works the way you sort a hand of cards.",
+    "start": 4.766,
+    "end": 8.822,
+    "beat": "intro_hand"
+  },
+  {
+    "id": 3,
+    "text": "On its own, the first card is already a sorted hand.",
+    "start": 9.172,
+    "end": 13.324,
+    "beat": "intro_sorted"
+  },
+  {
+    "id": 4,
+    "text": "We will count every comparison and every shift along the way.",
+    "start": 13.674,
+    "end": 18.018,
+    "beat": "rule_count"
+  },
+  {
+    "id": 5,
+    "text": "Pick up the next card, two, leaving a hole behind it.",
+    "start": 18.368,
+    "end": 22.616,
+    "beat": "p1_lift"
+  },
+  {
+    "id": 6,
+    "text": "Compare two with five: five is bigger, so five has to move.",
+    "start": 22.966,
+    "end": 27.79,
+    "beat": "p1_cmp"
+  },
+  {
+    "id": 7,
+    "text": "Five shifts one place right, sliding into the hole.",
+    "start": 28.14,
+    "end": 32.148,
+    "beat": "p1_shift"
+  },
+  {
+    "id": 8,
+    "text": "Nothing is left of the hole, so two drops in at the front.",
+    "start": 32.498,
+    "end": 36.578,
+    "beat": "p1_insert"
+  },
+  {
+    "id": 9,
+    "text": "Pick up the next card, nine, from index two.",
+    "start": 36.928,
+    "end": 40.936,
+    "beat": "p2_lift"
+  },
+  {
+    "id": 10,
+    "text": "Compare nine with five: five is smaller, so we stop right away.",
+    "start": 41.286,
+    "end": 46.134,
+    "beat": "p2_cmp"
+  },
+  {
+    "id": 11,
+    "text": "Nine drops straight back into the hole it came from.",
+    "start": 46.484,
+    "end": 50.108,
+    "beat": "p2_insert"
+  },
+  {
+    "id": 12,
+    "text": "Pick up the next card, one, opening a hole at index three.",
+    "start": 50.458,
+    "end": 55.162,
+    "beat": "p3_lift"
+  },
+  {
+    "id": 13,
+    "text": "Compare one with nine: nine is bigger, so nine has to move.",
+    "start": 55.512,
+    "end": 60.12,
+    "beat": "p3_cmp1"
+  },
+  {
+    "id": 14,
+    "text": "Nine shifts right, and the hole moves left to index two.",
+    "start": 60.47,
+    "end": 64.838,
+    "beat": "p3_shift1"
+  },
+  {
+    "id": 15,
+    "text": "Compare one with five: five is bigger too, so five must move.",
+    "start": 65.188,
+    "end": 70.18,
+    "beat": "p3_cmp2"
+  },
+  {
+    "id": 16,
+    "text": "Five shifts right, and the hole moves left to index one.",
+    "start": 70.53,
+    "end": 74.874,
+    "beat": "p3_shift2"
+  },
+  {
+    "id": 17,
+    "text": "Compare one with two: two is bigger as well, so it moves.",
+    "start": 75.224,
+    "end": 79.664,
+    "beat": "p3_cmp3"
+  },
+  {
+    "id": 18,
+    "text": "Two shifts right, and the hole reaches the very front.",
+    "start": 80.014,
+    "end": 83.926,
+    "beat": "p3_shift3"
+  },
+  {
+    "id": 19,
+    "text": "Nothing is left to compare, so one drops in at index zero.",
+    "start": 84.276,
+    "end": 89.028,
+    "beat": "p3_insert"
+  },
+  {
+    "id": 20,
+    "text": "Pick up the last card, six, leaving a hole at index four.",
+    "start": 89.378,
+    "end": 94.13,
+    "beat": "p4_lift"
+  },
+  {
+    "id": 21,
+    "text": "Compare six with nine: nine is bigger, so nine has to move.",
+    "start": 94.48,
+    "end": 99.208,
+    "beat": "p4_cmp1"
+  },
+  {
+    "id": 22,
+    "text": "Nine shifts right into the hole, which moves to index three.",
+    "start": 99.558,
+    "end": 103.95,
+    "beat": "p4_shift"
+  },
+  {
+    "id": 23,
+    "text": "Compare six with five: five is smaller, so the search stops here.",
+    "start": 104.3,
+    "end": 109.268,
+    "beat": "p4_cmp2"
+  },
+  {
+    "id": 24,
+    "text": "Six drops into index three, between five and nine.",
+    "start": 109.618,
+    "end": 114.058,
+    "beat": "p4_insert"
+  },
+  {
+    "id": 25,
+    "text": "Every card is now in place: one, two, five, six, nine.",
+    "start": 114.408,
+    "end": 119.952,
+    "beat": "an_sorted",
+    "caption": "Every card is now in place: 1, 2, 5, 6, 9"
+  },
+  {
+    "id": 26,
+    "text": "That took seven comparisons and five shifts for five cards.",
+    "start": 120.302,
+    "end": 125.03,
+    "beat": "an_counts"
+  },
+  {
+    "id": 27,
+    "text": "A reversed array would force every card all the way left.",
+    "start": 125.38,
+    "end": 129.46,
+    "beat": "an_worst"
+  },
+  {
+    "id": 28,
+    "text": "In general, the comparisons grow like n squared in the worst case.",
+    "start": 129.81,
+    "end": 134.682,
+    "beat": "an_square"
+  },
+  {
+    "id": 29,
+    "text": "But on nearly sorted input, each card stops after one comparison.",
+    "start": 135.032,
+    "end": 140.12,
+    "beat": "an_best"
+  },
+  {
+    "id": 30,
+    "text": "Pick up, shift the bigger cards right, and drop into the hole.",
+    "start": 140.47,
+    "end": 144.934,
+    "beat": "end_line"
+  }
+]
