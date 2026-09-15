@@ -15,7 +15,13 @@ function projectMedia() {
   return { name: 'project-media', configureServer: mount, configurePreviewServer: mount }
 }
 
+// The classifier service (tools/classify_api.py); same origin for the browser, so no CORS.
+const proxy = {
+  '/api': { target: 'http://127.0.0.1:8000', rewrite: (path) => path.replace(/^\/api/, '') },
+}
+
 export default defineConfig({
   plugins: [react(), projectMedia()],
-  server: { port: 5173 },
+  server: { port: 5173, proxy },
+  preview: { proxy },
 })

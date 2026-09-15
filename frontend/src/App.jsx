@@ -5,7 +5,7 @@ import { classify } from './classify.js'
 import { PlayIcon } from './icons.jsx'
 import { useNarration, useScript, useVideoClock } from './narration.js'
 import { Readout } from './Readout.jsx'
-import { TOPICS, topicByCategory, topicById, videoUrl } from './topics.js'
+import { TOPICS, topicById, videoUrl } from './topics.js'
 import { Transport } from './Transport.jsx'
 
 function play(video) {
@@ -34,19 +34,27 @@ export default function App() {
     if (playOnLoad.current) play(videoRef.current)
   }, [topicId])
 
-  function showTopic(id) {
-    playOnLoad.current = true
-    if (id === topicId) play(videoRef.current)
-    else setTopicId(id)
+  function showTopic(id, autoplay = true) {
+    playOnLoad.current = autoplay
+    if (id !== topicId) setTopicId(id)
+    else if (autoplay) play(videoRef.current)
   }
 
   async function handleAsk(query) {
     const seq = ++askSeq.current
-    const category = await classify(query)
+    let result
+    try {
+      result = await classify(query)
+    } catch (err) {
+      if (seq !== askSeq.current) return
+      console.warn('classifier unavailable:', err)
+      setClassification({ seq, query, unavailable: true })
+      return
+    }
     if (seq !== askSeq.current) return // superseded by a newer question or a manual pick
-    const matched = category ? topicByCategory(category) : null
-    setClassification({ seq, query, category, topicId: matched?.id ?? null })
-    if (matched) showTopic(matched.id)
+    setClassification({ seq, query, ...result })
+    // A low-confidence match is only the closest topic: show it, but don't start narrating.
+    if (result.topic) showTopic(result.topic, !result.low_confidence)
   }
 
   function pickTopic(id) {
@@ -74,7 +82,7 @@ export default function App() {
             <p className="eyebrow">{topic.subject}</p>
             <h1 className="title">{topic.title}</h1>
           </div>
-          <Readout result={classification} />
+          <Readout result={classification} onPickTopic={pickTopic} />
         </div>
 
         <div className="frame">

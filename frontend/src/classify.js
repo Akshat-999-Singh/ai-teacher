@@ -1,24 +1,12 @@
-// Stand-in for the trained classifier (models/classifier.pkl), with the contract the
-// real one will keep: free text in, one of its six category labels or null out, async.
-const KEYWORDS = {
-  sorting: ['sort', 'swap', 'bubble', 'ascending', 'descending'],
-  searching: ['search', 'binary', 'target', 'sorted array', 'log n'],
-  dynamic_programming: ['kadane', 'subarray', 'contiguous', 'maximum sum', 'subsequence'],
-  stack: ['parenthes', 'bracket', 'balanced', 'stack'],
-  math: ['gcd', 'divisor', 'euclid', 'common factor', 'prime'],
-  physics: ['projectile', 'velocity', 'thrown', 'launch', 'trajectory', 'gravity'],
-}
-
-export async function classify(query) {
-  const q = query.toLowerCase()
-  let best = null
-  let bestHits = 0
-  for (const [category, words] of Object.entries(KEYWORDS)) {
-    const hits = words.filter((w) => q.includes(w)).length
-    if (hits > bestHits) {
-      best = category
-      bestHits = hits
-    }
-  }
-  return best
+// The classifier service (tools/classify_api.py), proxied by Vite at /api. Resolves to
+// { category, confidence, topic, low_confidence, candidates: [{ category, score, topic }] }.
+export async function classify(text) {
+  const res = await fetch('/api/classify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text }),
+    signal: AbortSignal.timeout(10000),
+  })
+  if (!res.ok) throw new Error(`classifier responded ${res.status}`)
+  return res.json()
 }

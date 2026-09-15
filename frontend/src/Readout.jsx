@@ -1,27 +1,75 @@
 import { topicById } from './topics.js'
 
-// What the classifier made of the last question: the query, its predicted category,
-// and the topic that category retrieved.
-export function Readout({ result }) {
+const percent = (score) => `${Math.round(score * 100)}%`
+const titleOf = (id) => (id ? topicById(id).title : 'none rendered yet')
+
+// What the classifier made of the last question. At most three single lines, so the
+// video below never moves when a result arrives.
+export function Readout({ result, onPickTopic }) {
   return (
     <div className="readout" aria-live="polite">
       {result && (
         <div className="readout-inner" key={result.seq}>
-          <p className="readout-query">“{result.query}”</p>
-          <p className="readout-result">
-            {result.category ? (
-              <>
-                <span className="readout-label">Category</span>
-                <span className="readout-value">{result.category}</span>
-                <span className="readout-label">Topic</span>
-                <span className="readout-value readout-topic">{topicById(result.topicId).title}</span>
-              </>
-            ) : (
-              'No category matched'
-            )}
-          </p>
+          {result.unavailable ? (
+            <>
+              <p className="readout-query">“{result.query}”</p>
+              <p className="readout-main">The classifier isn’t reachable. Choose a topic from the list.</p>
+            </>
+          ) : (
+            <Classified result={result} onPickTopic={onPickTopic} />
+          )}
         </div>
       )}
     </div>
+  )
+}
+
+function Classified({ result, onPickTopic }) {
+  const [best, runnerUp] = result.candidates
+  return (
+    <>
+      {result.low_confidence ? (
+        <p className="readout-note">
+          There’s no explanation for “<span className="readout-q">{result.query}</span>” yet.
+        </p>
+      ) : (
+        <p className="readout-query">“{result.query}”</p>
+      )}
+
+      <p className="readout-main">
+        {result.low_confidence ? (
+          <>
+            <span className="readout-label">Closest available topic</span>
+            <span className="readout-topic">{titleOf(result.topic)}</span>
+          </>
+        ) : (
+          <>
+            <span className="readout-label">Category</span>
+            <span className="readout-value">
+              {best.category} <span className="readout-score">{percent(best.score)}</span>
+            </span>
+            <span className="readout-label">Topic</span>
+            <span className="readout-topic">{titleOf(result.topic)}</span>
+          </>
+        )}
+      </p>
+
+      <p className="readout-alt">
+        {result.low_confidence && `best guess ${best.category} ${percent(best.score)} · `}
+        {runnerUp && (
+          <>
+            runner-up {runnerUp.category} {percent(runnerUp.score)}
+            {runnerUp.topic && (
+              <>
+                {', '}
+                <button type="button" className="readout-link" onClick={() => onPickTopic(runnerUp.topic)}>
+                  {titleOf(runnerUp.topic)}
+                </button>
+              </>
+            )}
+          </>
+        )}
+      </p>
+    </>
   )
 }

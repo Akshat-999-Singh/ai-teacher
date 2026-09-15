@@ -170,7 +170,6 @@ button {
 .stage-heading {
   grid-area: heading;
   display: flex;
-  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   gap: 12px 32px;
@@ -178,7 +177,7 @@ button {
 }
 
 .heading-text {
-  min-width: 0;
+  flex: none;
 }
 
 .eyebrow {
@@ -199,9 +198,12 @@ button {
   letter-spacing: -0.01em;
 }
 
+/* Shrinks and truncates rather than wrapping: three lines fit beside the title, so a
+   result arriving never pushes the video down. */
 .readout {
+  flex: 0 1 auto;
   min-width: 0;
-  max-width: 55%;
+  line-height: 1.4;
   text-align: right;
 }
 
@@ -211,20 +213,51 @@ button {
 
 .readout p {
   margin: 0;
-}
-
-.readout-query {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.readout-query,
+.readout-alt {
   font-size: 12.5px;
   color: var(--text-faint);
 }
 
-.readout-result {
-  margin-top: 3px;
+.readout-note {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.readout-q {
+  display: inline-block;
+  max-width: 24ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
+.readout p.readout-main {
+  margin-block: 2px;
   font-size: 14.5px;
   color: var(--text-muted);
+}
+
+.readout-score {
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.readout-link {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--hairline);
+  text-underline-offset: 3px;
+  transition: opacity var(--quick) var(--ease);
+}
+
+.readout-link:hover {
+  opacity: 0.8;
 }
 
 .readout-label {
@@ -554,8 +587,12 @@ button {
     flex-basis: 100%;
   }
 
+  .stage-heading {
+    flex-wrap: wrap;
+  }
+
   .readout {
-    max-width: 100%;
+    flex-basis: 100%;
     text-align: left;
   }
 

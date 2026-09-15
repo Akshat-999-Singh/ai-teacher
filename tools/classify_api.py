@@ -1,0 +1,124 @@
+"""HTTP front for the problem classifier, for the React app.
+
+POST /classify {"text": "..."} ->
+  {category, confidence, topic, low_confidence, candidates: [{category, score, topic}] x2}
+
+Run: .venv\\Scripts\\python.exe tools\\classify_api.py    (serves http://127.0.0.1:8000)
+Run it as a script from the project root: models/classifier.pkl references the
+sentence_embedder module, which is importable because tools/ is the script's directory.
+"""
+import os
+
+# The embedding weights are already cached on D: (sentence_embedder.HF_CACHE). Stay offline
+# so startup never reaches for the network or the default C: cache.
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
+
+import pickle
+import re
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+import numpy as np
+import uvicorn
+from fastapi import FastAPI
+from pydantic import BaseModel, ConfigDict, Field
+
+ROOT = Path(__file__).resolve().parent.parent
+MODEL_PATH = ROOT / "models" / "classifier.pkl"
+RENDERED_DIR = ROOT / "rendered"
+
+TOPIC_CATEGORY = {
+    "bubble_sort": "sorting",
+    "binary_search": "searching",
+    "kadane": "dynamic_programming",
+    "valid_parentheses": "stack",
+    "euclidean_gcd": "math",
+    "projectile_motion": "physics",
+}
+
+TOP_K = 2
+
+# Measured on the held-out v2 test split (n=131): top-1 accuracy is 38-40% when the best
+# probability is below 0.40, 74% at or above it, and 100% above 0.60.
+LOW_CONFIDENCE_BELOW = 0.40
+
+# Topics known to have no video. The model can only answer with one of its six categories,
+# so a question about any of these still gets a category -- sometimes confidently. v2's
+# labelling made it worse: LeetCode problems tagged both Stack and Linked List were filed
+# under stack, so "how do I reverse a linked list" scores stack at 0.50 and would play
+# Valid parentheses as a confident match. A mention of any of these forces low_confidence
+# whatever the score. Accepted cost: "graph"/"tree" also appear in some maths and physics
+# questions ("the graph of y = x^2"), which will be flagged too.
+ABSENT_TOPICS = re.compile(
+    r"\b(?:linked[\s-]?lists?|graphs?|trees?|bfs|dfs|breadth[\s-]?first|depth[\s-]?first"
+    r"|hash[\s-]?maps?|two[\s-]?sum)\b",
+    re.IGNORECASE,
+)
+
+_state = {}
+
+
+class ClassifyRequest(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+    text: str = Field(min_length=1, max_length=2000)
+
+
+class Candidate(BaseModel):
+    category: str
+    score: float
+    topic: str | None
+
+
+class ClassifyResponse(BaseModel):
+    category: str
+    confidence: float
+    topic: str | None
+    low_confidence: bool
+    candidates: list[Candidate]
+
+
+def rendered_topic(category):
+    # Checked per request, so a newly rendered video is served without a restart.
+    for topic, cat in TOPIC_CATEGORY.items():
+        if cat == category and (RENDERED_DIR / f"{topic}.mp4").exists():
+            return topic
+    return None
+
+
+@asynccontextmanager
+async def lifespan(app):
+    with open(MODEL_PATH, "rb") as f:
+        pipeline = pickle.load(f)
+    pipeline.predict_proba(["warm-up"])  # load the embedding model now, not on the first request
+    _state["pipeline"] = pipeline
+    yield
+
+
+app = FastAPI(title="AI Teacher classifier", lifespan=lifespan)
+
+
+@app.post("/classify", response_model=ClassifyResponse)
+def classify(request: ClassifyRequest):
+    pipeline = _state["pipeline"]
+    probs = pipeline.predict_proba([request.text])[0]
+    classes = pipeline.classes_
+
+    candidates = [
+        Candidate(category=str(classes[i]), score=round(float(probs[i]), 4),
+                  topic=rendered_topic(str(classes[i])))
+        for i in np.argsort(probs)[::-1][:TOP_K]
+    ]
+    best = candidates[0]
+    return ClassifyResponse(
+        category=best.category,
+        confidence=best.score,
+        # Retrieval looks past the top category when it has no rendered video.
+        topic=next((c.topic for c in candidates if c.topic), None),
+        low_confidence=best.score < LOW_CONFIDENCE_BELOW or ABSENT_TOPICS.search(request.text) is not None,
+        candidates=candidates,
+    )
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
