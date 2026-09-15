@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Right at the top, the vertical speed hits zero.

@@ -1,0 +1,2 @@
+en-US-AriaNeural
+This arrow shows the launch speed: twenty meters per second.

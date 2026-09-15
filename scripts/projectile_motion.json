@@ -1,29 +1,191 @@
 [
-  { "id": 1, "beat": "intro_ground", "text": "Here is a flat stretch of level ground, ready for launch." },
-  { "id": 2, "beat": "intro_velocity", "text": "This arrow shows the launch speed: twenty meters per second." },
-  { "id": 3, "beat": "intro_angle", "text": "That arrow points thirty degrees above the horizontal ground." },
-  { "id": 4, "beat": "intro_rule", "text": "Horizontal motion and vertical motion are completely independent of each other." },
-  { "id": 5, "beat": "intro_rule2", "text": "Nothing that happens vertically ever changes what happens horizontally." },
-  { "id": 6, "beat": "decomp_vx", "text": "The horizontal piece of that speed is seventeen point three." },
-  { "id": 7, "beat": "decomp_vy", "text": "The vertical piece of that same speed is exactly ten." },
-  { "id": 8, "beat": "intro_balls", "text": "Three balls will now track this launch in different ways." },
-  { "id": 9, "beat": "label_balls", "text": "One is real, one tracks sideways, one tracks straight up." },
-  { "id": 10, "beat": "clear_setup", "text": "The setup fades away, leaving three balls ready to move." },
-  { "id": 11, "beat": "p1_rise1", "text": "All three launch together, each one going its own way." },
-  { "id": 12, "beat": "p1_rise2", "text": "The horizontal ball keeps a perfectly steady, unchanging speed." },
-  { "id": 13, "beat": "p1_rise3", "text": "But the vertical speed keeps shrinking, heading toward zero." },
-  { "id": 14, "beat": "apex_hit", "text": "Right at the top, the vertical speed hits zero." },
-  { "id": 15, "beat": "apex_numbers", "text": "That instant lands at one second, five meters high." },
-  { "id": 16, "beat": "p2_fall1", "text": "Past the peak, that vertical speed reverses its direction." },
-  { "id": 17, "beat": "p2_fall2", "text": "It grows again, still without touching the horizontal speed." },
-  { "id": 18, "beat": "p2_fall3", "text": "The ball lands exactly when its vertical shadow returns down." },
-  { "id": 19, "beat": "land_time", "text": "Total time in the air comes to two seconds." },
-  { "id": 20, "beat": "land_range", "text": "It travels about thirty four point six meters sideways." },
-  { "id": 21, "beat": "recap_shadow", "text": "The ground shadow moved at one unbroken, constant pace." },
-  { "id": 22, "beat": "recap_vertical", "text": "The vertical shadow rose and fell on its own." },
-  { "id": 23, "beat": "recap_claim", "text": "That is the independence promised at the very start." },
-  { "id": 24, "beat": "an_formula_t", "text": "In general, flight time equals twice vertical speed over g." },
-  { "id": 25, "beat": "an_formula_r", "text": "Range is simply horizontal speed multiplied by that time." },
-  { "id": 26, "beat": "end_sweep", "text": "Two independent motions combined into one curved flight path." },
-  { "id": 27, "beat": "end_line", "text": "That is projectile motion, one direction at a time." }
+  {
+    "id": 1,
+    "text": "Here is a flat stretch of level ground, ready for launch.",
+    "start": 0.0,
+    "end": 4.104,
+    "beat": "intro_ground"
+  },
+  {
+    "id": 2,
+    "text": "This arrow shows the launch speed: twenty meters per second.",
+    "start": 4.454,
+    "end": 8.99,
+    "beat": "intro_velocity"
+  },
+  {
+    "id": 3,
+    "text": "That arrow points thirty degrees above the horizontal ground.",
+    "start": 9.34,
+    "end": 13.708,
+    "beat": "intro_angle"
+  },
+  {
+    "id": 4,
+    "text": "Horizontal motion and vertical motion are completely independent of each other.",
+    "start": 14.058,
+    "end": 19.242,
+    "beat": "intro_rule"
+  },
+  {
+    "id": 5,
+    "text": "Nothing that happens vertically ever changes what happens horizontally.",
+    "start": 19.592,
+    "end": 24.296,
+    "beat": "intro_rule2"
+  },
+  {
+    "id": 6,
+    "text": "The horizontal piece of that speed is seventeen point three.",
+    "start": 24.646,
+    "end": 28.774,
+    "beat": "decomp_vx"
+  },
+  {
+    "id": 7,
+    "text": "The vertical piece of that same speed is exactly ten.",
+    "start": 29.124,
+    "end": 33.06,
+    "beat": "decomp_vy"
+  },
+  {
+    "id": 10,
+    "text": "The setup clears away, making room for what happens next.",
+    "start": 33.41,
+    "end": 37.826,
+    "beat": "clear_setup"
+  },
+  {
+    "id": 8,
+    "text": "Three balls will now track this launch in different ways.",
+    "start": 38.176,
+    "end": 42.016,
+    "beat": "intro_balls"
+  },
+  {
+    "id": 9,
+    "text": "One is real, one tracks sideways, one tracks straight up.",
+    "start": 42.366,
+    "end": 47.046,
+    "beat": "label_balls"
+  },
+  {
+    "id": 11,
+    "text": "All three launch together, each one going its own way.",
+    "start": 47.396,
+    "end": 51.428,
+    "beat": "p1_rise1"
+  },
+  {
+    "id": 12,
+    "text": "The horizontal ball keeps a perfectly steady, unchanging speed.",
+    "start": 51.778,
+    "end": 56.482,
+    "beat": "p1_rise2"
+  },
+  {
+    "id": 13,
+    "text": "But the vertical speed keeps shrinking, heading toward zero.",
+    "start": 56.832,
+    "end": 60.984,
+    "beat": "p1_rise3"
+  },
+  {
+    "id": 14,
+    "text": "Right at the top, the vertical speed hits zero.",
+    "start": 61.334,
+    "end": 65.03,
+    "beat": "apex_hit"
+  },
+  {
+    "id": 15,
+    "text": "That instant lands at one second, five meters high.",
+    "start": 65.38,
+    "end": 69.628,
+    "beat": "apex_numbers"
+  },
+  {
+    "id": 16,
+    "text": "Past the peak, that vertical speed reverses its direction.",
+    "start": 69.978,
+    "end": 74.346,
+    "beat": "p2_fall1"
+  },
+  {
+    "id": 17,
+    "text": "It grows again, still without touching the horizontal speed.",
+    "start": 74.696,
+    "end": 79.04,
+    "beat": "p2_fall2"
+  },
+  {
+    "id": 18,
+    "text": "The ball lands exactly when its vertical shadow returns down.",
+    "start": 79.39,
+    "end": 83.83,
+    "beat": "p2_fall3"
+  },
+  {
+    "id": 19,
+    "text": "Total time in the air comes to two seconds.",
+    "start": 84.18,
+    "end": 87.492,
+    "beat": "land_time"
+  },
+  {
+    "id": 20,
+    "text": "It travels about thirty four point six meters sideways.",
+    "start": 87.842,
+    "end": 92.09,
+    "beat": "land_range"
+  },
+  {
+    "id": 21,
+    "text": "The ground shadow moved at one unbroken, constant pace.",
+    "start": 92.44,
+    "end": 96.784,
+    "beat": "recap_shadow"
+  },
+  {
+    "id": 22,
+    "text": "The vertical shadow rose and fell on its own.",
+    "start": 97.134,
+    "end": 100.59,
+    "beat": "recap_vertical"
+  },
+  {
+    "id": 23,
+    "text": "That is the independence promised at the very start.",
+    "start": 100.94,
+    "end": 104.612,
+    "beat": "recap_claim"
+  },
+  {
+    "id": 24,
+    "text": "In general, flight time equals twice vertical speed over g.",
+    "start": 104.962,
+    "end": 109.666,
+    "beat": "an_formula_t"
+  },
+  {
+    "id": 25,
+    "text": "Range is simply horizontal speed multiplied by that time.",
+    "start": 110.016,
+    "end": 114.264,
+    "beat": "an_formula_r"
+  },
+  {
+    "id": 26,
+    "text": "Two independent motions combined into one curved flight path.",
+    "start": 114.614,
+    "end": 119.078,
+    "beat": "end_sweep"
+  },
+  {
+    "id": 27,
+    "text": "That is projectile motion, one direction at a time.",
+    "start": 119.428,
+    "end": 123.436,
+    "beat": "end_line"
+  }
 ]

@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Horizontal motion and vertical motion are completely independent of each other.

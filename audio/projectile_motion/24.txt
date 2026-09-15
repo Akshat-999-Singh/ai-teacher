@@ -1,0 +1,2 @@
+en-US-AriaNeural
+In general, flight time equals twice vertical speed over g.
