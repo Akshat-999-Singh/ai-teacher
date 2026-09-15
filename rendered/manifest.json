@@ -61,5 +61,12 @@
     "video": "rendered/derivative.mp4",
     "script": "scripts/derivative.json",
     "scene": "scenes/derivative.py"
+  },
+  "derivatives": {
+    "title": "Derivative as a function",
+    "category": "math",
+    "video": "rendered/derivatives.mp4",
+    "script": "scripts/derivatives.json",
+    "scene": "scenes/derivatives.py"
   }
 }

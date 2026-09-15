@@ -22,7 +22,7 @@ from __future__ import annotations
 import argparse
 import ast
 import inspect
-from pathlib import Path
+import sys
 
 import manim
 
@@ -74,6 +74,7 @@ def main() -> None:
     parser.add_argument("--exclude", action="append", default=[], metavar="TOPIC",
                         help="leave a topic out, e.g. the one being built")
     args = parser.parse_args()
+    sys.stdout.reconfigure(encoding="utf-8")  # titles are not all ASCII; the Windows console default is cp1252
 
     mobjects, animations = manim_classes()
     scenes = {

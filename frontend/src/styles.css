@@ -46,7 +46,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
   color: inherit;
 }
@@ -66,6 +68,11 @@ button {
 
 ::selection {
   background: rgb(var(--ink) / 0.2);
+}
+
+/* Views are toggled with the hidden attribute; .stage's display: grid would beat the UA rule. */
+[hidden] {
+  display: none !important;
 }
 
 .visually-hidden {
@@ -100,11 +107,61 @@ button {
   margin: 0 auto 40px;
 }
 
+.masthead-start {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 36px;
+}
+
 .wordmark {
   margin: 0;
   font-family: var(--serif);
   font-size: 20px;
   line-height: 1.2;
+}
+
+/* Watch / Generate: the same faint-until-current treatment as the topic list. */
+.views {
+  display: flex;
+  gap: 22px;
+}
+
+.view {
+  position: relative;
+  padding: 2px 0 7px;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  transition: opacity var(--quick) var(--ease);
+}
+
+.view:hover {
+  opacity: 0.9;
+}
+
+.view[aria-current='page'] {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.view::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 16px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--settle) var(--ease);
+}
+
+.view[aria-current='page']::after {
+  transform: scaleX(1);
 }
 
 .stage {
@@ -127,11 +184,13 @@ button {
   margin: 0;
 }
 
-.ask-field {
+.ask-field,
+.line-field {
   position: relative;
 }
 
-.ask-input {
+.ask-input,
+.line-input {
   display: block;
   width: 100%;
   padding: 6px 0 7px;
@@ -142,12 +201,14 @@ button {
   font-size: 14px;
 }
 
-.ask-input::placeholder {
+.ask-input::placeholder,
+.line-input::placeholder {
   color: var(--text-faint);
 }
 
 /* The accent line drawing in is this field's focus ring. */
-.ask-input:focus-visible {
+.ask-input:focus-visible,
+.line-input:focus-visible {
   outline: none;
 }
 
@@ -161,7 +222,8 @@ button {
   transition: transform var(--settle) var(--ease);
 }
 
-.ask-field:focus-within .ask-line {
+.ask-field:focus-within .ask-line,
+.line-field:focus-within .ask-line {
   transform: scaleX(1);
 }
 
@@ -556,6 +618,214 @@ button {
 
 .topic-title {
   font-size: 14.5px;
+}
+
+/* ---- generate (placeholder: never calls the backend) --------------------- */
+
+.generate {
+  width: calc(var(--video-w) + var(--col-gap) + var(--side));
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.generate-body {
+  max-width: 600px;
+}
+
+.generate-heading {
+  margin-bottom: 36px;
+}
+
+.generate-lede {
+  margin: 12px 0 0;
+  max-width: 52ch;
+  color: var(--text-muted);
+}
+
+.generate-form {
+  display: grid;
+  gap: 28px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field-label {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.field-optional {
+  margin-left: 6px;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.line-input {
+  font-size: 15px;
+}
+
+.line-select {
+  padding-right: 28px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.line-select option {
+  background: var(--ground);
+  color: var(--text);
+}
+
+.select-chevron {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+.brief-input {
+  display: block;
+  width: 100%;
+  min-height: 132px;
+  margin-top: 4px;
+  padding: 12px 14px;
+  background: transparent;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.brief-input::placeholder {
+  color: var(--text-faint);
+}
+
+.brief-input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.generate-action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-top: 4px;
+}
+
+.generate-button {
+  flex: none;
+  height: 40px;
+  padding: 0 26px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.generate-button:disabled {
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+
+.generate-helper {
+  flex: 1 1 260px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.generate-helper code {
+  font: inherit;
+  color: var(--text);
+}
+
+.pipeline {
+  margin-top: 52px;
+  padding-top: 28px;
+  border-top: 1px solid var(--hairline);
+}
+
+.pipeline-heading {
+  margin: 0 0 14px;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.pipeline-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pipeline-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-block: 8px;
+  font-size: 14.5px;
+  color: var(--text-faint);
+}
+
+/* The rail from each marker down to the next one. */
+.pipeline-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 4.5px;
+  top: calc(50% + 9px);
+  bottom: calc(9px - 50%);
+  width: 1px;
+  background: var(--hairline);
+}
+
+.pipeline-mark {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgb(var(--ink) / 0.28);
+  border-radius: 50%;
+}
+
+.pipeline-state {
+  margin-left: auto;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pipeline-step[data-state='complete'] {
+  color: var(--text);
+}
+
+.pipeline-step[data-state='complete'] .pipeline-mark {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.pipeline-step[data-state='complete'] .pipeline-state {
+  color: var(--accent);
+}
+
+.pipeline-note {
+  margin: 18px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
 }
 
 /* ---- narrow screens ------------------------------------------------------ */

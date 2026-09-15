@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Read the slope graph, and you know where the curve rises and falls.

@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Flat means slope zero, so the dot sits right on the axis.

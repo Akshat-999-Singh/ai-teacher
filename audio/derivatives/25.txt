@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Wherever f falls, the slope graph dips below the axis.

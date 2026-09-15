@@ -1,6 +1,6 @@
 ---
 name: new-topic
-description: Build an AI-teacher topic end to end from just a topic name - a visual brief (generated and trace-checked when none is supplied), sentence-level narration JSON, a TimedScene with caption-first beats, edge-tts with measured timings, both sync checks, then render and mux to rendered/<topic>.mp4. Use when asked to build, add, or create a topic ("build topic 3: quicksort"), or to fix narration/animation sync in an existing one.
+description: Build an AI-teacher topic end to end from just a topic name - a visual brief (generated and trace-checked when none is supplied), sentence-level narration JSON, a TimedScene with caption-first beats, edge-tts with measured timings, all three checks, then render and mux to rendered/<topic>.mp4. Use when asked to build, add, or create a topic ("build topic 3: quicksort"), or to fix narration/animation sync in an existing one.
 ---
 
 # Building a topic
@@ -31,7 +31,7 @@ file name, the `TOPIC` attribute and the class name must agree.
 
 ```bash
 cd /d/ai-teacher
-./.venv/Scripts/python.exe tools/build_topic.py  <topic>                      # TTS + timings + BOTH checks
+./.venv/Scripts/python.exe tools/build_topic.py  <topic> --strict             # TTS + timings + all three checks; --strict fails a check that crashes
 ./.venv/Scripts/python.exe tools/render_topic.py <topic> --title "<Title>" --category <category> --quality h --fps 30  # render + mux + list
 ```
 
@@ -365,4 +365,4 @@ them onto different rows rather than hoping they never coincide.
 - [ ] `build_topic.py` exits 0: every beat in target, captions in sync, +0.000
 - [ ] Rendered, muxed and listed with `--title` and `--category`; it shows in the app sidebar on refresh
 - [ ] Frames sampled per phase and actually looked at
-- [ ] Report segment count, total duration, and both check results
+- [ ] Report the brief, segment count, total duration, and all three check results

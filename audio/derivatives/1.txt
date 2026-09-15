@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Our curve is f of x equals x cubed over three, minus x.

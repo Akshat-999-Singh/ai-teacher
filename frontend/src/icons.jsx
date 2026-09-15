@@ -6,6 +6,14 @@ export function PlayIcon() {
   )
 }
 
+export function ChevronDownIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path d="M3.5 6 8 10.5 12.5 6" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export function PauseIcon() {
   return (
     <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">

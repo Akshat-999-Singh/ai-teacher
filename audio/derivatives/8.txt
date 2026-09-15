@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Slope three becomes a dot at height three on the lower graph.

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Ask } from './Ask.jsx'
 import { AvatarSlot } from './AvatarSlot.jsx'
 import { classify } from './classify.js'
+import { Generate } from './Generate.jsx'
 import { PlayIcon } from './icons.jsx'
 import { useNarration, useScript, useVideoClock } from './narration.js'
 import { Readout } from './Readout.jsx'
@@ -25,6 +26,7 @@ export default function App() {
   const { topics, failed } = useTopics()
   const [pickedId, setPickedId] = useState(null)
   const [classification, setClassification] = useState(null)
+  const [view, setView] = useState('watch') // 'watch' | 'generate'; no router, just a toggle
 
   // The picked topic while it is listed, otherwise the first one.
   const topic = topics?.find((t) => t.id === pickedId) ?? topics?.[0] ?? null
@@ -62,7 +64,16 @@ export default function App() {
     else if (autoplay) play(videoRef.current)
   }
 
+  // Both views stay mounted and the other one is hidden: the video clock binds to its
+  // element once, and the Generate fields keep what was typed. A hidden video still
+  // plays its audio, so leaving Watch pauses it.
+  function showView(next) {
+    if (next !== 'watch') videoRef.current.pause()
+    setView(next)
+  }
+
   async function handleAsk(query) {
+    showView('watch') // the answer is a video, so a question always lands on Watch
     const seq = ++askSeq.current
     let result
     try {
@@ -97,11 +108,29 @@ export default function App() {
   return (
     <div className="page">
       <header className="masthead">
-        <p className="wordmark">AI Teacher</p>
+        <div className="masthead-start">
+          <p className="wordmark">AI Teacher</p>
+          <nav className="views" aria-label="Views">
+            {[
+              ['watch', 'Watch'],
+              ['generate', 'Generate'],
+            ].map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                className="view"
+                aria-current={view === id ? 'page' : undefined}
+                onClick={() => showView(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </nav>
+        </div>
         <Ask onAsk={handleAsk} />
       </header>
 
-      <main className="stage">
+      <main className="stage" hidden={view !== 'watch'}>
         <div className="stage-heading">
           <div className="heading-text">
             <p className="eyebrow">{topic ? subjectOf(topic.category) : BLANK}</p>
@@ -160,6 +189,8 @@ export default function App() {
           </nav>
         </aside>
       </main>
+
+      <Generate hidden={view !== 'generate'} />
     </div>
   )
 }

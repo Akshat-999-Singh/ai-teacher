@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Its slope is three, so the curve climbs steeply here.

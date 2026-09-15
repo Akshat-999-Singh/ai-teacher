@@ -94,7 +94,7 @@ sidebar still play.
 ## Building a topic
 
 ```powershell
-.venv\Scripts\python.exe tools\build_topic.py  <topic>              # TTS, timings, all three checks
+.venv\Scripts\python.exe tools\build_topic.py  <topic> --strict     # TTS, timings, all three checks (--strict: a crashed check fails)
 .venv\Scripts\python.exe tools\render_topic.py <topic> --title "<Title>" --category <category> --quality h  # render, mux, list
 ```
 

@@ -1,0 +1,200 @@
+[
+  {
+    "id": 1,
+    "text": "Our curve is f of x equals x cubed over three, minus x.",
+    "start": 0.0,
+    "end": 5.208,
+    "beat": "intro_curve",
+    "caption": "Our curve is f(x) = x cubed over 3, minus x"
+  },
+  {
+    "id": 2,
+    "text": "It climbs to a hill, falls into a valley, then climbs again.",
+    "start": 5.558,
+    "end": 10.262,
+    "beat": "intro_shape"
+  },
+  {
+    "id": 3,
+    "text": "Start at x equals minus two, on the far left of the curve.",
+    "start": 10.612,
+    "end": 15.244,
+    "beat": "intro_point"
+  },
+  {
+    "id": 4,
+    "text": "The tangent line here shows how steep the curve is at this point.",
+    "start": 15.594,
+    "end": 19.794,
+    "beat": "intro_tangent"
+  },
+  {
+    "id": 5,
+    "text": "Its slope is three, so the curve climbs steeply here.",
+    "start": 20.144,
+    "end": 24.248,
+    "beat": "intro_slope"
+  },
+  {
+    "id": 6,
+    "text": "Underneath, a second graph will record the slope at every x.",
+    "start": 24.598,
+    "end": 29.134,
+    "beat": "setup_axes"
+  },
+  {
+    "id": 7,
+    "text": "A dashed line joins the same x on both graphs.",
+    "start": 29.484,
+    "end": 33.348,
+    "beat": "setup_guide"
+  },
+  {
+    "id": 8,
+    "text": "Slope three becomes a dot at height three on the lower graph.",
+    "start": 33.698,
+    "end": 37.946,
+    "beat": "setup_dot",
+    "caption": "Slope 3 becomes a dot at height 3 on the lower graph"
+  },
+  {
+    "id": 9,
+    "text": "Now slide the point right, and the dot draws a trail below.",
+    "start": 38.296,
+    "end": 42.544,
+    "beat": "s1_slide"
+  },
+  {
+    "id": 10,
+    "text": "At the hilltop, x equals minus one, the tangent is perfectly flat.",
+    "start": 42.894,
+    "end": 48.27,
+    "beat": "s1_flat"
+  },
+  {
+    "id": 11,
+    "text": "Flat means slope zero, so the dot sits right on the axis.",
+    "start": 48.62,
+    "end": 53.228,
+    "beat": "s1_zero"
+  },
+  {
+    "id": 12,
+    "text": "The top of the hill lines up exactly with a zero below.",
+    "start": 53.578,
+    "end": 57.73,
+    "beat": "s1_link"
+  },
+  {
+    "id": 13,
+    "text": "Keep sliding right, going downhill now, toward x equals zero.",
+    "start": 58.08,
+    "end": 63.12,
+    "beat": "s2_slide"
+  },
+  {
+    "id": 14,
+    "text": "Downhill slopes are negative, so the dot has dropped below the axis.",
+    "start": 63.47,
+    "end": 68.414,
+    "beat": "s2_negative"
+  },
+  {
+    "id": 15,
+    "text": "At x equals zero, the slope has fallen to minus one.",
+    "start": 68.764,
+    "end": 73.228,
+    "beat": "s2_bottom"
+  },
+  {
+    "id": 16,
+    "text": "Slide on toward x equals one, where the valley bottoms out.",
+    "start": 73.578,
+    "end": 78.114,
+    "beat": "s3_slide"
+  },
+  {
+    "id": 17,
+    "text": "At the valley floor the tangent is flat again, slope zero.",
+    "start": 78.464,
+    "end": 82.928,
+    "beat": "s3_flat"
+  },
+  {
+    "id": 18,
+    "text": "So the bottom of the valley also lines up with a zero.",
+    "start": 83.278,
+    "end": 87.238,
+    "beat": "s3_link"
+  },
+  {
+    "id": 19,
+    "text": "Now climb out of the valley, all the way to x equals two.",
+    "start": 87.588,
+    "end": 91.836,
+    "beat": "s4_slide"
+  },
+  {
+    "id": 20,
+    "text": "Uphill again, so the slope is positive, back up at three.",
+    "start": 92.186,
+    "end": 96.626,
+    "beat": "s4_positive"
+  },
+  {
+    "id": 21,
+    "text": "The trail of dots is a whole new curve: the slope graph.",
+    "start": 96.976,
+    "end": 101.2,
+    "beat": "an_trace"
+  },
+  {
+    "id": 22,
+    "text": "This slope graph is the derivative, x squared minus one.",
+    "start": 101.55,
+    "end": 105.87,
+    "beat": "an_formula"
+  },
+  {
+    "id": 23,
+    "text": "At x equals one, one squared minus one is zero, as we saw.",
+    "start": 106.22,
+    "end": 111.572,
+    "beat": "an_check"
+  },
+  {
+    "id": 24,
+    "text": "Wherever f climbs, the slope graph sits above the axis.",
+    "start": 111.922,
+    "end": 116.41,
+    "beat": "an_up"
+  },
+  {
+    "id": 25,
+    "text": "Wherever f falls, the slope graph dips below the axis.",
+    "start": 116.76,
+    "end": 121.344,
+    "beat": "an_down"
+  },
+  {
+    "id": 26,
+    "text": "And wherever f turns around, the slope graph crosses zero.",
+    "start": 121.694,
+    "end": 126.278,
+    "beat": "an_turn"
+  },
+  {
+    "id": 27,
+    "text": "So a derivative is not just one number, it is a whole function.",
+    "start": 126.628,
+    "end": 131.116,
+    "beat": "end_general"
+  },
+  {
+    "id": 28,
+    "text": "Read the slope graph, and you know where the curve rises and falls.",
+    "start": 131.466,
+    "end": 135.906,
+    "beat": "end_line"
+  }
+]

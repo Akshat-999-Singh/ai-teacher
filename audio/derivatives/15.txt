@@ -1,0 +1,2 @@
+en-US-AriaNeural
+At x equals zero, the slope has fallen to minus one.

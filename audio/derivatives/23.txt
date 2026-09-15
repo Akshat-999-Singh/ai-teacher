@@ -1,0 +1,2 @@
+en-US-AriaNeural
+At x equals one, one squared minus one is zero, as we saw.

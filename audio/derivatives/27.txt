@@ -1,0 +1,2 @@
+en-US-AriaNeural
+So a derivative is not just one number, it is a whole function.
