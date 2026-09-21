@@ -1,0 +1,2 @@
+en-US-AriaNeural
+The loss at any point is x squared plus four y squared.

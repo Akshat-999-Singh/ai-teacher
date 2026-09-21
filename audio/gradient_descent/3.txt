@@ -1,0 +1,2 @@
+en-US-AriaNeural
+The lowest point, where the loss is zero, sits right here.

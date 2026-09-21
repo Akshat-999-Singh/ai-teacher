@@ -169,7 +169,9 @@ export default function App() {
         />
 
         <aside className="sidebar">
-          <AvatarSlot segment={currentSegment} speaking={speaking} />
+          {/* `speaking` only means the clock sits inside a segment, so a paused video
+              would leave the mouth moving with no narration. */}
+          <AvatarSlot segment={currentSegment} speaking={speaking && !clock.paused} />
           <nav className="topics" aria-label="Topics" ref={topicsRef}>
             <ul>
               {topics?.map((t) => (

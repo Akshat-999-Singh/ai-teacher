@@ -1,0 +1,2 @@
+en-US-AriaNeural
+The learning rate, zero point one, shrinks it to one small step.

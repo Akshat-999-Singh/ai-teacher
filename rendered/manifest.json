@@ -68,5 +68,19 @@
     "video": "rendered/derivatives.mp4",
     "script": "scripts/derivatives.json",
     "scene": "scenes/derivatives.py"
+  },
+  "newtons_method": {
+    "title": "Newton's method",
+    "category": "math",
+    "video": "rendered/newtons_method.mp4",
+    "script": "scripts/newtons_method.json",
+    "scene": "scenes/newtons_method.py"
+  },
+  "gradient_descent": {
+    "title": "Gradient descent",
+    "category": "math",
+    "video": "rendered/gradient_descent.mp4",
+    "script": "scripts/gradient_descent.json",
+    "scene": "scenes/gradient_descent.py"
   }
 }

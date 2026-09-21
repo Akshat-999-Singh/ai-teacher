@@ -1,0 +1,2 @@
+en-US-AriaNeural
+One warning: starting at zero gives a completely flat tangent.

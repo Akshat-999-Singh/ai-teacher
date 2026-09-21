@@ -1,0 +1,2 @@
+en-US-AriaNeural
+The gradient is an arrow pointing in the steepest uphill direction.

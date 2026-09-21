@@ -1,0 +1,219 @@
+[
+  {
+    "id": 1,
+    "text": "Here is the curve f of x equals x squared minus two.",
+    "start": 0.0,
+    "end": 4.224,
+    "beat": "intro_curve",
+    "caption": "Here is the curve f(x) = x squared minus 2"
+  },
+  {
+    "id": 2,
+    "text": "We want the x where this curve crosses zero.",
+    "start": 4.574,
+    "end": 8.03,
+    "beat": "intro_root"
+  },
+  {
+    "id": 3,
+    "text": "That x is the square root of two, which we pretend not to know.",
+    "start": 8.38,
+    "end": 12.964,
+    "beat": "intro_sqrt2"
+  },
+  {
+    "id": 4,
+    "text": "Start instead from a rough guess: x naught equals two.",
+    "start": 13.314,
+    "end": 17.394,
+    "beat": "intro_guess",
+    "caption": "Start instead from a rough guess: x0 = 2"
+  },
+  {
+    "id": 5,
+    "text": "Go straight up to the curve, where f of two is two.",
+    "start": 17.744,
+    "end": 21.584,
+    "beat": "s1_rise",
+    "caption": "Go straight up to the curve, where f(2) = 2"
+  },
+  {
+    "id": 6,
+    "text": "Draw the tangent there, whose slope, two x, is four.",
+    "start": 21.934,
+    "end": 26.254,
+    "beat": "s1_tangent",
+    "caption": "Draw the tangent there, whose slope, 2x, is 4"
+  },
+  {
+    "id": 7,
+    "text": "Ride the tangent down to zero, landing at one point five.",
+    "start": 26.604,
+    "end": 31.068,
+    "beat": "s1_slide",
+    "caption": "Ride the tangent down to zero, landing at 1.5"
+  },
+  {
+    "id": 8,
+    "text": "The next step would be tiny here, so zoom in on the root.",
+    "start": 31.418,
+    "end": 35.618,
+    "beat": "z1_box"
+  },
+  {
+    "id": 9,
+    "text": "Magnified ten times, the curve already looks nearly straight.",
+    "start": 35.968,
+    "end": 40.696,
+    "beat": "z1_open"
+  },
+  {
+    "id": 10,
+    "text": "From one point five, go up to the curve, at height one quarter.",
+    "start": 41.046,
+    "end": 45.582,
+    "beat": "s2_rise",
+    "caption": "From 1.5, go up to the curve, at height 0.25"
+  },
+  {
+    "id": 11,
+    "text": "The tangent here has slope three, and hugs the curve closely.",
+    "start": 45.932,
+    "end": 50.372,
+    "beat": "s2_tangent"
+  },
+  {
+    "id": 12,
+    "text": "Riding it down lands at seventeen twelfths, about one point four one seven.",
+    "start": 50.722,
+    "end": 56.218,
+    "beat": "s2_slide",
+    "caption": "Riding it down lands at 17/12, about 1.417"
+  },
+  {
+    "id": 13,
+    "text": "That lands so close to the root that we must zoom again.",
+    "start": 56.568,
+    "end": 60.456,
+    "beat": "z2_box"
+  },
+  {
+    "id": 14,
+    "text": "Zoom in twenty five times more, and the picture looks the same.",
+    "start": 60.806,
+    "end": 65.294,
+    "beat": "z2_open"
+  },
+  {
+    "id": 15,
+    "text": "Go up to the curve, now only seven thousandths above zero.",
+    "start": 65.644,
+    "end": 69.988,
+    "beat": "s3_rise",
+    "caption": "Go up to the curve, now only 0.007 above zero"
+  },
+  {
+    "id": 16,
+    "text": "Its tangent, with slope about two point eight three, is almost the curve.",
+    "start": 70.338,
+    "end": 75.402,
+    "beat": "s3_tangent",
+    "caption": "Its tangent, with slope about 2.83, is almost the curve"
+  },
+  {
+    "id": 17,
+    "text": "It lands at one point four one four two one six.",
+    "start": 75.752,
+    "end": 79.928,
+    "beat": "s3_slide",
+    "caption": "It lands at 1.414216"
+  },
+  {
+    "id": 18,
+    "text": "Every step subtracts f of x divided by the slope.",
+    "start": 80.278,
+    "end": 84.334,
+    "beat": "rule_step",
+    "caption": "Every step subtracts f(x) divided by the slope"
+  },
+  {
+    "id": 19,
+    "text": "Here, that is the average of x and two divided by x.",
+    "start": 84.684,
+    "end": 89.124,
+    "beat": "rule_sqrt2",
+    "caption": "Here, that is the average of x and 2/x"
+  },
+  {
+    "id": 20,
+    "text": "Now write every guess out to twelve decimal places.",
+    "start": 89.474,
+    "end": 93.362,
+    "beat": "d_table"
+  },
+  {
+    "id": 21,
+    "text": "One point five gets only the first digit right.",
+    "start": 93.712,
+    "end": 97.456,
+    "beat": "d_x1",
+    "caption": "1.5 gets only the first digit right"
+  },
+  {
+    "id": 22,
+    "text": "The second guess, seventeen twelfths, gets three digits right.",
+    "start": 97.806,
+    "end": 102.486,
+    "beat": "d_x2",
+    "caption": "The second guess, 17/12, gets three digits right"
+  },
+  {
+    "id": 23,
+    "text": "The third guess gets six right, twice as many as before.",
+    "start": 102.836,
+    "end": 107.204,
+    "beat": "d_x3"
+  },
+  {
+    "id": 24,
+    "text": "One more step gives twelve correct digits, doubling once again.",
+    "start": 107.554,
+    "end": 112.282,
+    "beat": "d_x4"
+  },
+  {
+    "id": 25,
+    "text": "The error roughly squares each step, so the correct digits double.",
+    "start": 112.632,
+    "end": 117.384,
+    "beat": "d_why"
+  },
+  {
+    "id": 26,
+    "text": "One warning: starting at zero gives a completely flat tangent.",
+    "start": 117.734,
+    "end": 122.51,
+    "beat": "warn_flat"
+  },
+  {
+    "id": 27,
+    "text": "A flat tangent never reaches zero, so the method breaks down.",
+    "start": 122.86,
+    "end": 127.612,
+    "beat": "warn_never"
+  },
+  {
+    "id": 28,
+    "text": "Start close enough, and each step doubles the correct digits.",
+    "start": 127.962,
+    "end": 132.498,
+    "beat": "end_digits"
+  },
+  {
+    "id": 29,
+    "text": "Guess, follow the tangent down to zero, and repeat.",
+    "start": 132.848,
+    "end": 137.024,
+    "beat": "end_line"
+  }
+]

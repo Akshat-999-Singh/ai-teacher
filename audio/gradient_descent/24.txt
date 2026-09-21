@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Steeper walls mean bigger gradients, so every leap is longer than the last.

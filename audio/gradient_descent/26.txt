@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Same map, same start: only the learning rate was changed.

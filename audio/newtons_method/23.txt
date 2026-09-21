@@ -1,0 +1,2 @@
+en-US-AriaNeural
+The third guess gets six right, twice as many as before.

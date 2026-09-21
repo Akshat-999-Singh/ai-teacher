@@ -1,5 +1,5 @@
 ---
-name: new-topic
+name: new-topic #smo-sort me out
 description: Build an AI-teacher topic end to end from just a topic name - a visual brief (generated and trace-checked when none is supplied), sentence-level narration JSON, a TimedScene with caption-first beats, edge-tts with measured timings, all three checks, then render and mux to rendered/<topic>.mp4. Use when asked to build, add, or create a topic ("build topic 3: quicksort"), or to fix narration/animation sync in an existing one.
 ---
 

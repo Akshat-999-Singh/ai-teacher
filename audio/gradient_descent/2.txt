@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Each ring joins points of equal loss, and inner rings are lower.

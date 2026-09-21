@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Too small a rate is safe, but the descent is slow.

@@ -1,0 +1,2 @@
+en-US-AriaNeural
+The error roughly squares each step, so the correct digits double.

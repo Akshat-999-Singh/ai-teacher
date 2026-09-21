@@ -1,0 +1,2 @@
+en-US-AriaNeural
+After five steps the loss is about one point seven, still creeping along.

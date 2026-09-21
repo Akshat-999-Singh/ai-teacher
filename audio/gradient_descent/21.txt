@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Now push further, with a learning rate of zero point three.

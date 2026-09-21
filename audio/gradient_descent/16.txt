@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Now go back to the start and double the learning rate.

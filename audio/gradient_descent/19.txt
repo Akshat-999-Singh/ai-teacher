@@ -1,0 +1,2 @@
+en-US-AriaNeural
+Each bounce is smaller, and the loss is already below one.
